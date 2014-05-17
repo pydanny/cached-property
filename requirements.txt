@@ -1,5 +1,5 @@
 # Testing and deployment packages.
 coverage
-py.test
+pytest
 pytest-cov
 wheel==0.23.0
