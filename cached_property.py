@@ -2,7 +2,8 @@
 
 __author__ = 'Daniel Greenfeld'
 __email__ = 'pydanny@gmail.com'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
+__license__ = 'BSD'
 
 
 class cached_property(object):

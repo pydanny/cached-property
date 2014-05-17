@@ -21,13 +21,13 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist bdist_wheel upload')
     print("You probably want to also tag the version now:")
     print("  git tag -a %s -m 'version %s'" % (cached_property.__version__,
-        cached_property.version))
+        cached_property.__version__))
     print("  git push --tags")
     sys.exit()
 
 setup(
     name='cached-property',
-    version='0.1.0',
+    version=cached_property.__version__,
     description='A cached-property for decorating methods in classes.',
     long_description=readme + '\n\n' + history,
     author='Daniel Greenfeld',
