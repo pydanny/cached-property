@@ -92,3 +92,4 @@ Credits
 
 * Django, Werkzueg, Bottle, and Zope for having their own implementations. This package uses the Django version.
 * Reinout Van Rees for pointing out the cached_property decorator to me.
+* My awesome wife Audrey who created cookiecutter, which meant rolling this out took me just 15 minutes.
