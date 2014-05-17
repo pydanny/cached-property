@@ -63,8 +63,8 @@ Let's convert the boardwalk property into a `cached_property`.
         def __init__(self):
             self.boardwalk_price = 500
 
-        @property
-        def cached_property(self):
+        @cached_property
+        def boardwalk(self):
             # Again, this is a silly example. Don't worry about it, this is
             #   just an example for clarity.
             self.boardwalk_price += 50
@@ -82,7 +82,7 @@ Now when we run it the price stays at $550.
     >>> monopoly.boardwalk
     550
 
-Why doesn't the value of `m.boardwalk` change? Because it's a **cached property**!
+Why doesn't the value of `monopoly.boardwalk` change? Because it's a **cached property**!
 
 Credits
 --------
