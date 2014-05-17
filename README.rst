@@ -27,8 +27,8 @@ Why?
 How to use it
 --------------
 
-Define a class with an expensive property. Every time you stay there the 
-price goes up by $50. I
+Let's define a class with an expensive property. Every time you stay there the 
+price goes up by $50!
 
 .. code-block:: python
 
@@ -48,10 +48,10 @@ Now run it:
 
 .. code-block:: python
 
-    >>> m = Monopoly()
-    >>> m.boardwalk
+    >>> monopoly = Monopoly()
+    >>> monopoly.boardwalk
     550
-    >>> m.boardwalk
+    >>> monopoly.boardwalk
     600
 
 Let's convert the boardwalk property into a `cached_property`.
@@ -77,12 +77,12 @@ Now when we run it the price stays at $550.
 
 .. code-block:: python
 
-    >>> m = Monopoly()
-    >>> m.boardwalk
+    >>> monopoly = Monopoly()
+    >>> monopoly.boardwalk
     550
-    >>> m.boardwalk
+    >>> monopoly.boardwalk
     550
-    >>> m.boardwalk
+    >>> monopoly.boardwalk
     550
 
 Why doesn't the value of `m.boardwalk` change? Because it's a **cached property**!
