@@ -73,7 +73,7 @@ Let's convert the boardwalk property into a `cached_property`.
             self.boardwalk_price += 50
             return self.boardwalk_price
 
-Now when we run it the price stays at $550. Why? because it's cached!:
+Now when we run it the price stays at $550.
 
 .. code-block:: python
 
@@ -84,6 +84,8 @@ Now when we run it the price stays at $550. Why? because it's cached!:
     550
     >>> m.boardwalk
     550
+
+Why doesn't the value of `m.boardwalk` change? Because it's a **cached property**!:
 
 Credits
 --------
