@@ -14,9 +14,6 @@ cached-property
 
 A cached-property for decorating methods in classes.
 
-* Free software: BSD license
-* Documentation: http://cached-property.rtfd.org.
-
 Why?
 -----
 
