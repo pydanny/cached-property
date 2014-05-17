@@ -85,7 +85,7 @@ Now when we run it the price stays at $550.
     >>> m.boardwalk
     550
 
-Why doesn't the value of `m.boardwalk` change? Because it's a **cached property**!:
+Why doesn't the value of `m.boardwalk` change? Because it's a **cached property**!
 
 Credits
 --------
