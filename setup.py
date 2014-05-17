@@ -14,18 +14,14 @@ except ImportError:
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
-requirements = [
-    # TODO: put package requirements here
-]
 
-test_requirements = [
-    # TODO: put package test requirements here
-]
+import cached_property
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist bdist_wheel upload')
     print("You probably want to also tag the version now:")
-    print("  git tag -a %s -m 'version %s'" % (version, version))
+    print("  git tag -a %s -m 'version %s'" % (cached_property.__version__,
+        cached_property.version))
     print("  git push --tags")
     sys.exit()
 
@@ -37,13 +33,8 @@ setup(
     author='Daniel Greenfeld',
     author_email='pydanny@gmail.com',
     url='https://github.com/pydanny/cached-property',
-    packages=[
-        'cached_property',
-    ],
-    package_dir={'cached_property':
-                 'cached_property'},
+    py_modules=['dj_database_url'],
     include_package_data=True,
-    install_requires=requirements,
     license="BSD",
     zip_safe=False,
     keywords='cached-property',
@@ -58,6 +49,4 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
     ],
-    test_suite='tests',
-    tests_require=test_requirements
 )

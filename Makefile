@@ -25,16 +25,16 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 cached-property tests
+	flake8 cached_property tests
 
 test:
-	python setup.py test
+	py.test --cov cached_property
 
 test-all:
 	tox
 
 coverage:
-	coverage run --source cached-property setup.py test
+	py.test --cov cached_property
 	coverage report -m
 	coverage html
 	open htmlcov/index.html

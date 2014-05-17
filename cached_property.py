@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+__author__ = 'Daniel Greenfeld'
+__email__ = 'pydanny@gmail.com'
+__version__ = '0.1.0'
+
+
 class cached_property(object):
     """ A property that is only computed once per instance and then replaces
         itself with an ordinary attribute. Deleting the attribute resets the
