@@ -3,6 +3,16 @@
 History
 -------
 
+0.1.4 (2014-05-18)
+++++++++++++++++++
+
+* Fix the dang-blarged py_modules argument.
+
+0.1.3 (2014-05-17)
+++++++++++++++++++
+
+* Removed import of package into setup.py
+
 0.1.2 (2014-05-17)
 ++++++++++++++++++
 

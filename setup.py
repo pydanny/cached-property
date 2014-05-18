@@ -9,7 +9,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
@@ -29,7 +29,7 @@ setup(
     author='Daniel Greenfeld',
     author_email='pydanny@gmail.com',
     url='https://github.com/pydanny/cached-property',
-    py_modules=['dj_database_url'],
+    py_modules=['cached_property'],
     include_package_data=True,
     license="BSD",
     zip_safe=False,
