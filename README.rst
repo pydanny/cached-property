@@ -84,6 +84,28 @@ Now when we run it the price stays at $550.
 
 Why doesn't the value of `monopoly.boardwalk` change? Because it's a **cached property**!
 
+Invalidating the Cache
+----------------------
+
+Results of cached functions can be invalidated by outside forces. Let's demonstrate how to force the cache to invalidate:
+
+.. code-block:: python
+
+    >>> monopoly = Monopoly()
+    >>> monopoly.boardwalk
+    550
+    >>> monopoly.boardwalk
+    550
+    >>> # invalidate the cache
+    >>> del m.boardwalk
+    >>> # request the boardwalk property again
+    >>> m.boardwalk
+    600
+    >>> m.boardwalk
+    600
+
+
+
 Credits
 --------
 

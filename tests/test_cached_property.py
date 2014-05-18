@@ -42,3 +42,26 @@ class TestCachedProperty(unittest.TestCase):
         # The cached version demonstrates how nothing new is added
         self.assertEqual(c.add_cached, 1)
         self.assertEqual(c.add_cached, 1)
+
+    def test_reset_cached_property(self):
+
+        class Check(object):
+
+            def __init__(self):
+                self.total = 0
+
+            @cached_property
+            def add_cached(self):
+                self.total += 1
+                return self.total
+
+        c = Check()
+
+        # Run standard cache assertion
+        self.assertEqual(c.add_cached, 1)
+        self.assertEqual(c.add_cached, 1)
+
+        # Reset the cache.
+        del c.add_cached
+        self.assertEqual(c.add_cached, 2)
+        self.assertEqual(c.add_cached, 2)
