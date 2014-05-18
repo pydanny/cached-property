@@ -84,28 +84,6 @@ Now when we run it the price stays at $550.
 
 Why doesn't the value of `monopoly.boardwalk` change? Because it's a **cached property**!
 
-What if I want to use a cache that times out?
--------------------------------------------------
-
-Just import the `timed_cached_property`:
-
-.. code-block:: python
-
-    from cached_property import timed_cached_property
-
-    class Monopoly(object):
-
-        def __init__(self):
-            self.boardwalk_price = 500
-
-        # Times out in 5 minutes
-        @timed_cached_property(ttl=300)
-        def boardwalk(self):
-            # Sometimes the market crashes and prices drop back down to their
-            #   original value.
-            self.boardwalk_price += 50
-            return self.boardwalk_price
-
 Credits
 --------
 

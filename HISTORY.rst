@@ -8,7 +8,6 @@ History
 
 * Updated credits
 * Sourced the bottle implementation
-* Added a modified version of Christopher Arndt's implementation, which allows for caches that expire.
 
 0.1.4 (2014-05-17)
 ++++++++++++++++++
