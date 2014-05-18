@@ -28,7 +28,7 @@ lint:
 	flake8 cached_property tests
 
 test:
-	py.test cached_property.py
+	py.test
 
 test-all:
 	tox

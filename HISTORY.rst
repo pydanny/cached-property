@@ -6,6 +6,13 @@ History
 0.1.4 (2014-05-18)
 ++++++++++++++++++
 
+* Updated credits
+* Sourced the bottle implementation
+* Added a modified version of Christopher Arndt's implementation, which allows for caches that expire.
+
+0.1.4 (2014-05-17)
+++++++++++++++++++
+
 * Fix the dang-blarged py_modules argument.
 
 0.1.3 (2014-05-17)
