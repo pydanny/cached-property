@@ -4,30 +4,26 @@
 import os
 import sys
 
-
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
+__version__ = '0.1.3'
 
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
-
-import cached_property
-
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist bdist_wheel upload')
     print("You probably want to also tag the version now:")
-    print("  git tag -a %s -m 'version %s'" % (cached_property.__version__,
-        cached_property.__version__))
+    print("  git tag -a %s -m 'version %s'" % (__version__, __version__))
     print("  git push --tags")
     sys.exit()
 
 setup(
     name='cached-property',
-    version=cached_property.__version__,
+    version=__version__,
     description='A cached-property for decorating methods in classes.',
     long_description=readme + '\n\n' + history,
     author='Daniel Greenfeld',
