@@ -104,7 +104,10 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     >>> m.boardwalk
     600
 
+Warning
+-------
 
+This library currently doesn't work with threads. Please see https://github.com/pydanny/cached-property/issues/6.
 
 Credits
 --------
