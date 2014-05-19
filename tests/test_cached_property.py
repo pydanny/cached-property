@@ -1,13 +1,14 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
-test_cached-property
+tests.py
 ----------------------------------
 
 Tests for `cached-property` module.
 """
 
+from time import sleep
+from threading import Thread
 import unittest
 
 from cached_property import cached_property
@@ -65,3 +66,45 @@ class TestCachedProperty(unittest.TestCase):
         del c.add_cached
         self.assertEqual(c.add_cached, 2)
         self.assertEqual(c.add_cached, 2)
+
+    def test_none_cached_property(self):
+
+        class Check(object):
+
+            def __init__(self):
+                self.total = None
+
+            @cached_property
+            def add_cached(self):
+                return self.total
+
+        c = Check()
+
+        # Run standard cache assertion
+        self.assertEqual(c.add_cached, None)
+
+    # def test_threads(self):
+    #     """ How well does this implementation work with threads?"""
+
+    #     class Check(object):
+
+    #         def __init__(self):
+    #             self.total = 0
+
+    #         @cached_property
+    #         def add_cached(self):
+    #             sleep(1)
+    #             self.total += 1
+    #             return self.total
+
+    #     c = Check()
+    #     threads = []
+    #     for x in range(10):
+    #         thread = Thread(target=lambda: c.add_cached)
+    #         thread.start()
+    #         threads.append(thread)
+
+    #     for thread in threads:
+    #         thread.join()
+
+    #     self.assertEqual(c.add_cached, 1)
