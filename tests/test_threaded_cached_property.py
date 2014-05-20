@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """
-tests.py
+test_threaded_cache_property.py
 ----------------------------------
 
-Tests for `cached-property` module.
+Tests for `cached-property` module, threaded_cache_property.
 """
 
 from time import sleep
-from threading import Lock, Thread
+from threading import Thread, Lock
 import unittest
 
-from cached_property import cached_property
+from cached_property import threaded_cached_property
 
 
 class TestCachedProperty(unittest.TestCase):
@@ -29,7 +29,7 @@ class TestCachedProperty(unittest.TestCase):
                 self.total1 += 1
                 return self.total1
 
-            @cached_property
+            @threaded_cached_property
             def add_cached(self):
                 self.total2 += 1
                 return self.total2
@@ -51,7 +51,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = 0
 
-            @cached_property
+            @threaded_cached_property
             def add_cached(self):
                 self.total += 1
                 return self.total
@@ -74,7 +74,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = None
 
-            @cached_property
+            @threaded_cached_property
             def add_cached(self):
                 return self.total
 
@@ -95,7 +95,7 @@ class TestThreadingIssues(unittest.TestCase):
                 self.total = 0
                 self.lock = Lock()
 
-            @cached_property
+            @threaded_cached_property
             def add_cached(self):
                 sleep(1)
                 # Need to guard this since += isn't atomic.
@@ -105,8 +105,7 @@ class TestThreadingIssues(unittest.TestCase):
 
         c = Check()
         threads = []
-        num_threads = 10
-        for x in range(num_threads):
+        for x in range(10):
             thread = Thread(target=lambda: c.add_cached)
             thread.start()
             threads.append(thread)
@@ -114,16 +113,4 @@ class TestThreadingIssues(unittest.TestCase):
         for thread in threads:
             thread.join()
 
-        # TODO: This assertion should be working.
-        # See https://github.com/pydanny/cached-property/issues/6
-        # self.assertEqual(c.add_cached, 1)
-
-        # TODO: This assertion should be failing.
-        # See https://github.com/pydanny/cached-property/issues/6
-        # This assertion hinges on the fact the system executing the test can
-        # spawn and start running num_threads threads within the sleep period
-        # (defined in the Check class as 1 second). If num_threads were to be
-        # massively increased (try 10000), the actual value returned would be
-        # between 1 and num_threads, depending on thread scheduling and
-        # preemption.
-        self.assertEqual(c.add_cached, num_threads)
+        self.assertEqual(c.add_cached, 1)
