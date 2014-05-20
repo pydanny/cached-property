@@ -87,7 +87,9 @@ class TestCachedProperty(unittest.TestCase):
 class TestThreadingIssues(unittest.TestCase):
 
     def test_threads(self):
-        """ How well does this implementation work with threads?"""
+        """ How well does the standard cached_property implementation work with threads?
+            Short answer: It doesn't! Use threaded_cached_property instead!
+        """
 
         class Check(object):
 
@@ -114,12 +116,9 @@ class TestThreadingIssues(unittest.TestCase):
         for thread in threads:
             thread.join()
 
-        # TODO: This assertion should be working.
-        # See https://github.com/pydanny/cached-property/issues/6
-        # self.assertEqual(c.add_cached, 1)
+        # Threads means that caching is bypassed.
+        self.assertNotEqual(c.add_cached, 1)
 
-        # TODO: This assertion should be failing.
-        # See https://github.com/pydanny/cached-property/issues/6
         # This assertion hinges on the fact the system executing the test can
         # spawn and start running num_threads threads within the sleep period
         # (defined in the Check class as 1 second). If num_threads were to be
