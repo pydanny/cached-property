@@ -3,9 +3,10 @@
 History
 -------
 
-0.1.4 (2014-05-18)
+0.1.5 (2014-05-20)
 ++++++++++++++++++
 
+* Added threading support with new `threaded_cached_property` decorator
 * Documented cache invalidation
 * Updated credits
 * Sourced the bottle implementation

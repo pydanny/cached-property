@@ -104,10 +104,51 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     >>> m.boardwalk
     600
 
-Warning
--------
+Working with Threads
+---------------------
 
-This library currently doesn't work with threads. Please see https://github.com/pydanny/cached-property/issues/6.
+What if a whole bunch of people want to stay at Boardwalk all at once? This means using threads, which unfortunately causes problems with the standard `cached_property`. In this case, switch to using the `threaded_cached_property`:
+
+.. code-block:: python
+
+    import threading
+
+    from cached_property import cached_property
+
+    class Monopoly(object):
+
+        def __init__(self):
+            self.boardwalk_price = 500
+            self.lock = threading.Lock()
+
+        @threaded_cached_property
+        def boardwalk(self):
+            """threaded_cached_property is really nice for when no one waits
+                for other people to finish their turn and rudely start rolling
+                dice and moving their pieces."""
+
+            sleep(1)
+            # Need to guard this since += isn't atomic.
+            with self.lock:
+                self.boardwalk_price += 50
+            return self.boardwalk_price
+
+.. code-block:: python
+
+    >>> from threading import Thread
+    >>> from monopoly import Monopoly
+    >>> monopoly = Monopoly()
+    >>> threads = []
+    >>> for x in range(10):
+    >>>     thread = Thread(target=lambda: monopoly.boardwalk)
+    >>>     thread.start()
+    >>>     threads.append(thread)
+
+    >>> for thread in threads:
+    >>>     thread.join()
+
+    >>> self.assertEqual(m.boardwalk, 550)
+
 
 Credits
 --------
