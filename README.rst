@@ -113,7 +113,7 @@ What if a whole bunch of people want to stay at Boardwalk all at once? This mean
 
     import threading
 
-    from cached_property import cached_property
+    from cached_property import threaded_cached_property
 
     class Monopoly(object):
 
@@ -132,6 +132,8 @@ What if a whole bunch of people want to stay at Boardwalk all at once? This mean
             with self.lock:
                 self.boardwalk_price += 50
             return self.boardwalk_price
+
+Now use it:
 
 .. code-block:: python
 
