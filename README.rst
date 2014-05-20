@@ -97,11 +97,11 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     >>> monopoly.boardwalk
     550
     >>> # invalidate the cache
-    >>> del m.boardwalk
+    >>> del monopoly.boardwalk
     >>> # request the boardwalk property again
-    >>> m.boardwalk
+    >>> monopoly.boardwalk
     600
-    >>> m.boardwalk
+    >>> monopoly.boardwalk
     600
 
 Working with Threads
