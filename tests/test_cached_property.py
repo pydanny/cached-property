@@ -44,6 +44,10 @@ class TestCachedProperty(unittest.TestCase):
         self.assertEqual(c.add_cached, 1)
         self.assertEqual(c.add_cached, 1)
 
+        # It's customary for descriptors to return themselves if accessed
+        # though the class, rather than through an instance.
+        self.assertTrue(isinstance(Check.add_cached, cached_property))
+
     def test_reset_cached_property(self):
 
         class Check(object):
