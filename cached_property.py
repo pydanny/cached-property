@@ -17,10 +17,10 @@ class cached_property(object):
         Source: https://github.com/bottlepy/bottle/commit/fa7733e075da0d790d809aa3d2f53071897e6f76
         """
 
-    def __init__(self, func, ttl=None):
+    def __init__(self, func, **kwargs):
         self.__doc__ = getattr(func, '__doc__')
         self.func = func
-        self.ttl = ttl
+        self.ttl = kwargs.pop('ttl', None)
 
     def __get__(self, obj, cls):
         if obj is None:
@@ -46,8 +46,8 @@ class threaded_cached_property(cached_property):
     """ A cached_property version for use in environments where multiple
         threads might concurrently try to access the property.
         """
-    def __init__(self, func, ttl=None):
-        super(threaded_cached_property, self).__init__(func, ttl=ttl)
+    def __init__(self, func, **kwargs):
+        super(threaded_cached_property, self).__init__(func, **kwargs)
         self.lock = threading.RLock()
 
     def __get__(self, obj, cls):
