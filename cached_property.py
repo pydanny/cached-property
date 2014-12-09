@@ -20,6 +20,7 @@ class cached_property(object):
     def __init__(self, func, ttl=None):
         self.__doc__ = getattr(func, '__doc__')
         self.func = func
+        self.ttl = ttl
 
     def __get__(self, obj, cls):
         if obj is None:
