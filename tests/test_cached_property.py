@@ -10,6 +10,7 @@ Tests for `cached-property` module.
 from time import sleep
 from threading import Lock, Thread
 import unittest
+from freezegun import freeze_time
 
 from cached_property import cached_property
 
@@ -86,7 +87,30 @@ class TestCachedProperty(unittest.TestCase):
 
         # Run standard cache assertion
         self.assertEqual(c.add_cached, None)
+        
+class TestCachedPropertyWithTTL(unittest.TestCase):
+    def test_ttl_expiry(self):
 
+        class Check(object):
+
+            def __init__(self):
+                self.total = 0
+
+            @cached_property(ttl=100000)
+            def add_cached(self):
+                self.total += 1
+                return self.total
+
+        c = Check()
+
+        # Run standard cache assertion
+        self.assertEqual(c.add_cached, 1)
+        self.assertEqual(c.add_cached, 1)
+
+        # Expire the cache.
+        with freeze_time("9999-01-01"):
+            self.assertEqual(c.add_cached, 2)
+        self.assertEqual(c.add_cached, 2)
 
 class TestThreadingIssues(unittest.TestCase):
 
