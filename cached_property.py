@@ -24,7 +24,7 @@ class cached_property(object):
     def __get__(self, obj, cls):
         if obj is None:
             return self
-        if not ttl:
+        if not self.ttl:
             value = obj.__dict__[self.func.__name__] = self.func(obj)
             return value
         else:
