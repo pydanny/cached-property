@@ -30,7 +30,7 @@ class TestCachedProperty(unittest.TestCase):
                 self.total1 += 1
                 return self.total1
 
-            @cached_property()
+            @cached_property
             def add_cached(self):
                 self.total2 += 1
                 return self.total2
@@ -45,6 +45,10 @@ class TestCachedProperty(unittest.TestCase):
         self.assertEqual(c.add_cached, 1)
         self.assertEqual(c.add_cached, 1)
 
+        # Cannot expire the cache.
+        with freeze_time("9999-01-01"):
+            self.assertEqual(c.add_cached, 1)
+
         # It's customary for descriptors to return themselves if accessed
         # though the class, rather than through an instance.
         self.assertTrue(isinstance(Check.add_cached, cached_property))
@@ -56,7 +60,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = 0
 
-            @cached_property()
+            @cached_property
             def add_cached(self):
                 self.total += 1
                 return self.total
@@ -79,7 +83,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = None
 
-            @cached_property()
+            @cached_property
             def add_cached(self):
                 return self.total
 
@@ -102,7 +106,7 @@ class TestThreadingIssues(unittest.TestCase):
                 self.total = 0
                 self.lock = Lock()
 
-            @cached_property()
+            @cached_property
             def add_cached(self):
                 sleep(1)
                 # Need to guard this since += isn't atomic.
@@ -134,6 +138,7 @@ class TestThreadingIssues(unittest.TestCase):
 
 
 class TestCachedPropertyWithTTL(unittest.TestCase):
+
     def test_ttl_expiry(self):
 
         class Check(object):

@@ -17,15 +17,23 @@ class cached_property(object):
         Source: https://github.com/bottlepy/bottle/commit/fa7733e075da0d790d809aa3d2f53071897e6f76
         """  # noqa
 
-    def __init__(self, ttl=300):
-        self.ttl = ttl
+    def __init__(self, ttl=None):
+        ttl_or_func = ttl
+        self.ttl = None
+        if callable(ttl_or_func):
+            self.prepare_func(ttl_or_func)
+        else:
+            self.ttl = ttl_or_func
 
-    def __call__(self, func, doc=None):
+    def prepare_func(self, func, doc=None):
+        '''Prepare to cache object method.'''
         self.func = func
         self.__doc__ = doc or func.__doc__
         self.__name__ = func.__name__
         self.__module__ = func.__module__
 
+    def __call__(self, func, doc=None):
+        self.prepare_func(func, doc)
         return self
 
     def __get__(self, obj, cls):
@@ -35,7 +43,7 @@ class cached_property(object):
         now = time()
         try:
             value, last_update = obj._cache[self.__name__]
-            if self.ttl > 0 and now - last_update > self.ttl:
+            if self.ttl and self.ttl > 0 and now - last_update > self.ttl:
                 raise AttributeError
         except (KeyError, AttributeError):
             value = self.func(obj)
