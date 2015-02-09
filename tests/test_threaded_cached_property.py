@@ -29,7 +29,7 @@ class TestCachedProperty(unittest.TestCase):
                 self.total1 += 1
                 return self.total1
 
-            @threaded_cached_property
+            @threaded_cached_property()
             def add_cached(self):
                 self.total2 += 1
                 return self.total2
@@ -51,7 +51,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = 0
 
-            @threaded_cached_property
+            @threaded_cached_property()
             def add_cached(self):
                 self.total += 1
                 return self.total
@@ -63,7 +63,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assertEqual(c.add_cached, 1)
 
         # Reset the cache.
-        del c.add_cached
+        del c._cache['add_cached']
         self.assertEqual(c.add_cached, 2)
         self.assertEqual(c.add_cached, 2)
 
@@ -74,7 +74,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = None
 
-            @threaded_cached_property
+            @threaded_cached_property()
             def add_cached(self):
                 return self.total
 
@@ -95,7 +95,7 @@ class TestThreadingIssues(unittest.TestCase):
                 self.total = 0
                 self.lock = Lock()
 
-            @threaded_cached_property
+            @threaded_cached_property()
             def add_cached(self):
                 sleep(1)
                 # Need to guard this since += isn't atomic.

@@ -5,6 +5,7 @@ __email__ = 'pydanny@gmail.com'
 __version__ = '0.1.5'
 __license__ = 'BSD'
 
+from time import time
 import threading
 
 
@@ -14,34 +15,57 @@ class cached_property(object):
         property.
 
         Source: https://github.com/bottlepy/bottle/commit/fa7733e075da0d790d809aa3d2f53071897e6f76
-        """
+        """  # noqa
 
-    def __init__(self, func):
-        self.__doc__ = getattr(func, '__doc__')
+    def __init__(self, ttl=300):
+        self.ttl = ttl
+
+    def __call__(self, func, doc=None):
         self.func = func
+        self.__doc__ = doc or func.__doc__
+        self.__name__ = func.__name__
+        self.__module__ = func.__module__
+
+        return self
 
     def __get__(self, obj, cls):
         if obj is None:
             return self
-        value = obj.__dict__[self.func.__name__] = self.func(obj)
+
+        now = time()
+        try:
+            value, last_update = obj._cache[self.__name__]
+            if self.ttl > 0 and now - last_update > self.ttl:
+                raise AttributeError
+        except (KeyError, AttributeError):
+            value = self.func(obj)
+            try:
+                cache = obj._cache
+            except AttributeError:
+                cache = obj._cache = {}
+            cache[self.__name__] = (value, now)
+
         return value
+
+    def __delattr__(self, name):
+        print(name)
 
 
 class threaded_cached_property(cached_property):
     """ A cached_property version for use in environments where multiple
         threads might concurrently try to access the property.
         """
-    def __init__(self, func):
-        super(threaded_cached_property, self).__init__(func)
+    def __init__(self, ttl=None):
+        super(threaded_cached_property, self).__init__(ttl)
         self.lock = threading.RLock()
 
     def __get__(self, obj, cls):
         with self.lock:
             # Double check if the value was computed before the lock was
             # acquired.
-            prop_name = self.func.__name__
-            if prop_name in obj.__dict__:
-                return obj.__dict__[prop_name]
+            prop_name = self.__name__
+            if hasattr(obj, '_cache') and prop_name in obj._cache:
+                return obj._cache[prop_name][0]
 
             # If not, do the calculation and release the lock.
             return super(threaded_cached_property, self).__get__(obj, cls)

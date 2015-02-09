@@ -10,6 +10,7 @@ Tests for `cached-property` module.
 from time import sleep
 from threading import Lock, Thread
 import unittest
+from freezegun import freeze_time
 
 from cached_property import cached_property
 
@@ -29,7 +30,7 @@ class TestCachedProperty(unittest.TestCase):
                 self.total1 += 1
                 return self.total1
 
-            @cached_property
+            @cached_property()
             def add_cached(self):
                 self.total2 += 1
                 return self.total2
@@ -55,7 +56,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = 0
 
-            @cached_property
+            @cached_property()
             def add_cached(self):
                 self.total += 1
                 return self.total
@@ -67,7 +68,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assertEqual(c.add_cached, 1)
 
         # Reset the cache.
-        del c.add_cached
+        del c._cache['add_cached']
         self.assertEqual(c.add_cached, 2)
         self.assertEqual(c.add_cached, 2)
 
@@ -78,7 +79,7 @@ class TestCachedProperty(unittest.TestCase):
             def __init__(self):
                 self.total = None
 
-            @cached_property
+            @cached_property()
             def add_cached(self):
                 return self.total
 
@@ -93,7 +94,7 @@ class TestThreadingIssues(unittest.TestCase):
     def test_threads(self):
         """ How well does the standard cached_property implementation work with threads?
             Short answer: It doesn't! Use threaded_cached_property instead!
-        """
+        """  # noqa
 
         class Check(object):
 
@@ -101,7 +102,7 @@ class TestThreadingIssues(unittest.TestCase):
                 self.total = 0
                 self.lock = Lock()
 
-            @cached_property
+            @cached_property()
             def add_cached(self):
                 sleep(1)
                 # Need to guard this since += isn't atomic.
@@ -130,3 +131,28 @@ class TestThreadingIssues(unittest.TestCase):
         # between 1 and num_threads, depending on thread scheduling and
         # preemption.
         self.assertEqual(c.add_cached, num_threads)
+
+
+class TestCachedPropertyWithTTL(unittest.TestCase):
+    def test_ttl_expiry(self):
+
+        class Check(object):
+
+            def __init__(self):
+                self.total = 0
+
+            @cached_property(ttl=100000)
+            def add_cached(self):
+                self.total += 1
+                return self.total
+
+        c = Check()
+
+        # Run standard cache assertion
+        self.assertEqual(c.add_cached, 1)
+        self.assertEqual(c.add_cached, 1)
+
+        # Expire the cache.
+        with freeze_time("9999-01-01"):
+            self.assertEqual(c.add_cached, 2)
+        self.assertEqual(c.add_cached, 2)
