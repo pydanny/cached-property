@@ -16,9 +16,8 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist bdist_wheel upload')
-    print("You probably want to also tag the version now:")
-    print("  git tag -a %s -m 'version %s'" % (__version__, __version__))
-    print("  git push --tags")
+    os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
+    os.system("git push --tags")
     sys.exit()
 
 setup(
