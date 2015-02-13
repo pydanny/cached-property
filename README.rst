@@ -4,7 +4,7 @@ cached-property
 
 .. image:: https://badge.fury.io/py/cached-property.png
     :target: http://badge.fury.io/py/cached-property
-    
+
 .. image:: https://travis-ci.org/pydanny/cached-property.png?branch=master
         :target: https://travis-ci.org/pydanny/cached-property
 
@@ -110,7 +110,7 @@ Timing out the cache
 Sometimes you want the price of things to reset after a time. 
 
 .. code-block:: python
-    
+
     import random
     from cached_property import cached_property
 
@@ -120,6 +120,8 @@ Sometimes you want the price of things to reset after a time.
         def dice(self):
             # I dare the reader to implement a game using this method of 'rolling dice'.
             return random.randint(2,12)
+
+Now use it:
 
 .. code-block:: python
 
