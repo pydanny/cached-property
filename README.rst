@@ -103,6 +103,37 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     600
     >>> monopoly.boardwalk
     600
+    
+Timing out the cache
+--------------------
+
+Sometimes you want the price of things to reset after a time. 
+
+.. code-block:: python
+    
+    import random
+    from cached_property import cached_property
+
+    class Monopoly(object):
+
+        @cached_property(ttl=5) # cache invalidates after 10 seconds
+        def dice(self):
+            # I dare the reader to implement a game using this method of 'rolling dice'.
+            return random.randint(2,12)
+
+.. code-block:: python
+
+    >>> monopoly = Monopoly()
+    >>> monopoly.dice
+    10
+    >>> monopoly.dice
+    10
+    >>> from time import sleep
+    >>> sleep(6) # Sleeps long enough to expire the cache
+    >>> monopoly.dice
+    3
+    >>> monopoly.dice
+    3
 
 Working with Threads
 ---------------------
