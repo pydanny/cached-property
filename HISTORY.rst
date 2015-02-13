@@ -3,15 +3,15 @@
 History
 -------
 
-0.2.0 (2014-02-13)
+1.0.0 (2014-02-13)
 ++++++++++++++++++
 
-* Added timed to expire feature to cached property decorator.
+* Added timed to expire feature to ``cached_property`` decorator.
 
 0.1.5 (2014-05-20)
 ++++++++++++++++++
 
-* Added threading support with new `threaded_cached_property` decorator
+* Added threading support with new ``threaded_cached_property`` decorator
 * Documented cache invalidation
 * Updated credits
 * Sourced the bottle implementation
@@ -24,7 +24,7 @@ History
 0.1.3 (2014-05-17)
 ++++++++++++++++++
 
-* Removed import of package into setup.py
+* Removed import of package into ``setup.py``
 
 0.1.2 (2014-05-17)
 ++++++++++++++++++
