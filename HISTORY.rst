@@ -3,6 +3,11 @@
 History
 -------
 
+0.2.0 (2014-02-13)
+++++++++++++++++++
+
+* Added timed to expire feature to cached property decorator.
+
 0.1.5 (2014-05-20)
 ++++++++++++++++++
 
