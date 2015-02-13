@@ -63,7 +63,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assertEqual(c.add_cached, 1)
 
         # Reset the cache.
-        del c.add_cached
+        del c._cache['add_cached']
         self.assertEqual(c.add_cached, 2)
         self.assertEqual(c.add_cached, 2)
 

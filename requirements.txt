@@ -2,4 +2,5 @@
 coverage
 pytest
 pytest-cov
+freezegun
 wheel==0.23.0
