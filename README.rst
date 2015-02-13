@@ -51,7 +51,7 @@ Now run it:
     >>> monopoly.boardwalk
     600
 
-Let's convert the boardwalk property into a `cached_property`.
+Let's convert the boardwalk property into a ``cached_property``.
 
 
 .. code-block:: python
@@ -82,7 +82,7 @@ Now when we run it the price stays at $550.
     >>> monopoly.boardwalk
     550
 
-Why doesn't the value of `monopoly.boardwalk` change? Because it's a **cached property**!
+Why doesn't the value of ``monopoly.boardwalk`` change? Because it's a **cached property**!
 
 Invalidating the Cache
 ----------------------
@@ -97,7 +97,7 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     >>> monopoly.boardwalk
     550
     >>> # invalidate the cache
-    >>> del monopoly.boardwalk
+    >>> del monopoly['boardwalk']
     >>> # request the boardwalk property again
     >>> monopoly.boardwalk
     600
@@ -107,7 +107,9 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
 Working with Threads
 ---------------------
 
-What if a whole bunch of people want to stay at Boardwalk all at once? This means using threads, which unfortunately causes problems with the standard `cached_property`. In this case, switch to using the `threaded_cached_property`:
+What if a whole bunch of people want to stay at Boardwalk all at once? This means using threads, which
+unfortunately causes problems with the standard ``cached_property``. In this case, switch to using the
+``threaded_cached_property``:
 
 .. code-block:: python
 
@@ -158,6 +160,8 @@ Credits
 * Pip, Django, Werkzueg, Bottle, Pyramid, and Zope for having their own implementations. This package uses an implementation that matches the Bottle version.
 * Reinout Van Rees for pointing out the `cached_property` decorator to me.
 * My awesome wife `@audreyr`_ who created `cookiecutter`_, which meant rolling this out took me just 15 minutes.
+* @tinche for pointing out the threading issue and providing a solution.
+* @bcho for providing the time-to-expire feature
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`cookiecutter`: https://github.com/audreyr/cookiecutter
