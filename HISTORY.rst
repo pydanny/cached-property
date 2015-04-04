@@ -3,7 +3,12 @@
 History
 -------
 
-1.0.0 (2014-02-13)
+1.1.0 (2015-04-04)
+++++++++++++++++++
+
+* Fixed typo in README, thanks to @zoidbergwill.
+
+1.0.0 (2015-02-13)
 ++++++++++++++++++
 
 * Added timed to expire feature to ``cached_property`` decorator.
