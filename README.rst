@@ -116,7 +116,7 @@ Sometimes you want the price of things to reset after a time.
 
     class Monopoly(object):
 
-        @cached_property(ttl=5) # cache invalidates after 10 seconds
+        @cached_property(ttl=5) # cache invalidates after 5 seconds
         def dice(self):
             # I dare the reader to implement a game using this method of 'rolling dice'.
             return random.randint(2,12)
