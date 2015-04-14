@@ -6,6 +6,7 @@ History
 1.1.0 (2015-04-04)
 ++++++++++++++++++
 
+* Regression: As the cache was not always clearing, we've broken out the time to expire feature to it's own set of specific tools.
 * Fixed typo in README, thanks to @zoidbergwill.
 
 1.0.0 (2015-02-13)

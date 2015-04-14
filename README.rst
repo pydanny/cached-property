@@ -96,7 +96,7 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     >>> monopoly.boardwalk
     550
     >>> # invalidate the cache
-    >>> del monopoly['boardwalk']
+    >>> del monopoly.boardwalk
     >>> # request the boardwalk property again
     >>> monopoly.boardwalk
     600
@@ -186,6 +186,10 @@ Now use it:
     3
     >>> monopoly.dice
     3
+    >>> # This cache clearing does not always work, see note below.
+    >>> del monopoly['dice']
+    >>> monopoly.dice
+    6
 
 **Note:** The ``ttl`` tools do not reliably allow the clearing of the cache. This
 is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
