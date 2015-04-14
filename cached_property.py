@@ -13,8 +13,44 @@ class cached_property(object):
     """ A property that is only computed once per instance and then replaces
         itself with an ordinary attribute. Deleting the attribute resets the
         property.
-
         Source: https://github.com/bottlepy/bottle/commit/fa7733e075da0d790d809aa3d2f53071897e6f76
+        """
+
+    def __init__(self, func):
+        self.__doc__ = getattr(func, '__doc__')
+        self.func = func
+
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        value = obj.__dict__[self.func.__name__] = self.func(obj)
+        return value
+
+
+class threaded_cached_property(cached_property):
+    """ A cached_property version for use in environments where multiple
+        threads might concurrently try to access the property.
+        """
+    def __init__(self, func):
+        super(threaded_cached_property, self).__init__(func)
+        self.lock = threading.RLock()
+
+    def __get__(self, obj, cls):
+        with self.lock:
+            # Double check if the value was computed before the lock was
+            # acquired.
+            prop_name = self.func.__name__
+            if prop_name in obj.__dict__:
+                return obj.__dict__[prop_name]
+
+            # If not, do the calculation and release the lock.
+            return super(threaded_cached_property, self).__get__(obj, cls)
+
+
+class cached_property_with_ttl(object):
+    """ A property that is only computed once per instance and then replaces
+        itself with an ordinary attribute. Setting the ttl to a number expresses
+        how long the property will last before being timed out.
         """  # noqa
 
     def __init__(self, ttl=None):
@@ -55,16 +91,17 @@ class cached_property(object):
 
         return value
 
-    def __delattr__(self, name):
-        print(name)
+# Aliases to make cached_property_with_ttl easier to use
+cached_property_ttl = cached_property_with_ttl
+timed_cached_property = cached_property_with_ttl
 
 
-class threaded_cached_property(cached_property):
+class threaded_cached_property_with_ttl(cached_property_with_ttl):
     """ A cached_property version for use in environments where multiple
         threads might concurrently try to access the property.
         """
     def __init__(self, ttl=None):
-        super(threaded_cached_property, self).__init__(ttl)
+        super(threaded_cached_property_with_ttl, self).__init__(ttl)
         self.lock = threading.RLock()
 
     def __get__(self, obj, cls):
@@ -76,4 +113,9 @@ class threaded_cached_property(cached_property):
                 return obj._cache[prop_name][0]
 
             # If not, do the calculation and release the lock.
-            return super(threaded_cached_property, self).__get__(obj, cls)
+            return super(threaded_cached_property_with_ttl, self).__get__(obj, cls)
+
+# Alias to make threaded_cached_property_with_ttl easier to use
+threaded_cached_property_ttl = threaded_cached_property_with_ttl
+timed_threaded_cached_property = threaded_cached_property_with_ttl
+

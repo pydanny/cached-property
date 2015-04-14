@@ -53,7 +53,6 @@ Now run it:
 
 Let's convert the boardwalk property into a ``cached_property``.
 
-
 .. code-block:: python
 
     from cached_property import cached_property
@@ -103,39 +102,6 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     600
     >>> monopoly.boardwalk
     600
-    
-Timing out the cache
---------------------
-
-Sometimes you want the price of things to reset after a time. 
-
-.. code-block:: python
-
-    import random
-    from cached_property import cached_property
-
-    class Monopoly(object):
-
-        @cached_property(ttl=5) # cache invalidates after 5 seconds
-        def dice(self):
-            # I dare the reader to implement a game using this method of 'rolling dice'.
-            return random.randint(2,12)
-
-Now use it:
-
-.. code-block:: python
-
-    >>> monopoly = Monopoly()
-    >>> monopoly.dice
-    10
-    >>> monopoly.dice
-    10
-    >>> from time import sleep
-    >>> sleep(6) # Sleeps long enough to expire the cache
-    >>> monopoly.dice
-    3
-    >>> monopoly.dice
-    3
 
 Working with Threads
 ---------------------
@@ -186,6 +152,43 @@ Now use it:
 
     >>> self.assertEqual(m.boardwalk, 550)
 
+
+Timing out the cache
+--------------------
+
+Sometimes you want the price of things to reset after a time. Use the ``ttl``
+versions of ``cached_property`` and ``threaded_cached_property``.
+
+.. code-block:: python
+
+    import random
+    from cached_property import cached_property_with_ttl
+
+    class Monopoly(object):
+
+        @cached_property_with_ttl(ttl=5) # cache invalidates after 5 seconds
+        def dice(self):
+            # I dare the reader to implement a game using this method of 'rolling dice'.
+            return random.randint(2,12)
+
+Now use it:
+
+.. code-block:: python
+
+    >>> monopoly = Monopoly()
+    >>> monopoly.dice
+    10
+    >>> monopoly.dice
+    10
+    >>> from time import sleep
+    >>> sleep(6) # Sleeps long enough to expire the cache
+    >>> monopoly.dice
+    3
+    >>> monopoly.dice
+    3
+
+**Note:** The ``ttl`` tools do not reliably allow the clearing of the cache. This
+is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
 
 Credits
 --------

@@ -3,7 +3,6 @@
 """
 test_threaded_cache_property.py
 ----------------------------------
-
 Tests for `cached-property` module, threaded_cache_property.
 """
 
@@ -63,7 +62,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assertEqual(c.add_cached, 1)
 
         # Reset the cache.
-        del c._cache['add_cached']
+        del c.add_cached
         self.assertEqual(c.add_cached, 2)
         self.assertEqual(c.add_cached, 2)
 
