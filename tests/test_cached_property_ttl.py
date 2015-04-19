@@ -7,21 +7,16 @@ test_threaded_cache_property.py
 Tests for `cached-property` module, cached_property_with_ttl.
 Tests for `cached-property` module, threaded_cache_property_with_ttl.
 """
+
 import unittest
 from freezegun import freeze_time
+from time import sleep
+from threading import Lock, Thread
 
 from cached_property import (
     cached_property_with_ttl,
     threaded_cached_property_with_ttl
 )
-
-
-from time import sleep
-from threading import Lock, Thread
-import unittest
-from freezegun import freeze_time
-
-from cached_property import cached_property
 
 
 class TestCachedPropertyWithTTL(unittest.TestCase):

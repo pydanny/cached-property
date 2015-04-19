@@ -25,7 +25,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 cached_property tests
+	flake8 cached_property.py tests
 
 test:
 	py.test
