@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-test_threaded_cache_property.py
-----------------------------------
-
-Tests for `cached-property` module, cached_property_with_ttl.
-Tests for `cached-property` module, threaded_cache_property_with_ttl.
-"""
+"""Tests for cached_property_with_ttl and threaded_cache_property_with_ttl"""
 
 import unittest
 from freezegun import freeze_time
@@ -194,6 +188,14 @@ class TestThreadedCachedPropertyWithTTL(unittest.TestCase):
         self.assertEqual(c.add_cached, 1)
         self.assertEqual(c.add_cached, 1)
 
+        # Cannot expire the cache.
+        with freeze_time("9999-01-01"):
+            self.assertEqual(c.add_cached, 1)
+
+        # It's customary for descriptors to return themselves if accessed
+        # though the class, rather than through an instance.
+        self.assertTrue(isinstance(Check.add_cached, threaded_cached_property_with_ttl))
+
     def test_reset_cached_property(self):
 
         class Check(object):
@@ -264,3 +266,39 @@ class TestThreadedCachedPropertyWithTTL(unittest.TestCase):
             thread.join()
 
         self.assertEqual(c.add_cached, 1)
+
+    def test_ttl_expiry(self):
+
+        class Check(object):
+
+            def __init__(self):
+                self.total = 0
+                self.lock = Lock()
+
+            @threaded_cached_property_with_ttl(ttl=100000)
+            def add_cached(self):
+                sleep(1)
+                # Need to guard this since += isn't atomic.
+                with self.lock:
+                    self.total += 1
+                return self.total
+
+        def run_threads(check, num_threads=10):
+            threads = []
+            for _ in range(num_threads):
+                thread = Thread(target=lambda: check.add_cached)
+                thread.start()
+                threads.append(thread)
+            for thread in threads:
+                thread.join()
+
+        c = Check()
+        run_threads(c)
+        self.assertEqual(c.add_cached, 1)
+
+        # Expire the cache.
+        with freeze_time("9999-01-01"):
+            run_threads(c)
+            self.assertEqual(c.add_cached, 2)
+
+        self.assertEqual(c.add_cached, 2)

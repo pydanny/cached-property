@@ -121,13 +121,6 @@ class threaded_cached_property_with_ttl(cached_property_with_ttl):
 
     def __get__(self, obj, cls):
         with self.lock:
-            # Double check if the value was computed before the lock was
-            # acquired.
-            prop_name = self.__name__
-            if hasattr(obj, '_cache') and prop_name in obj._cache:
-                return obj._cache[prop_name][0]
-
-            # If not, do the calculation and release the lock.
             return super(threaded_cached_property_with_ttl, self).__get__(obj,
                                                                           cls)
 
