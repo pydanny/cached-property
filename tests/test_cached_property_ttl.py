@@ -24,7 +24,7 @@ from freezegun import freeze_time
 from cached_property import cached_property
 
 
-class TestCachedProperty(unittest.TestCase):
+class TestCachedPropertyWithTTL(unittest.TestCase):
 
     def test_cached_property(self):
 
@@ -101,9 +101,6 @@ class TestCachedProperty(unittest.TestCase):
         # Run standard cache assertion
         self.assertEqual(c.add_cached, None)
 
-
-class TestThreadingIssues(unittest.TestCase):
-
     def test_threads(self):
         """ How well does the standard cached_property implementation work with threads?
             Short answer: It doesn't! Use threaded_cached_property instead!
@@ -145,9 +142,6 @@ class TestThreadingIssues(unittest.TestCase):
         # preemption.
         self.assertEqual(c.add_cached, num_threads)
 
-
-class TestCachedPropertyWithTTL(unittest.TestCase):
-
     def test_ttl_expiry(self):
 
         class Check(object):
@@ -172,7 +166,7 @@ class TestCachedPropertyWithTTL(unittest.TestCase):
         self.assertEqual(c.add_cached, 2)
 
 
-class TestCachedProperty(unittest.TestCase):
+class TestThreadedCachedPropertyWithTTL(unittest.TestCase):
 
     def test_cached_property(self):
 
@@ -240,9 +234,6 @@ class TestCachedProperty(unittest.TestCase):
 
         # Run standard cache assertion
         self.assertEqual(c.add_cached, None)
-
-
-class TestThreadingIssues(unittest.TestCase):
 
     def test_threads(self):
         """ How well does this implementation work with threads?"""

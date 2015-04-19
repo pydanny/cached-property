@@ -13,7 +13,7 @@ import unittest
 from cached_property import threaded_cached_property
 
 
-class TestCachedProperty(unittest.TestCase):
+class TestThreadedCachedProperty(unittest.TestCase):
 
     def test_cached_property(self):
 
@@ -81,9 +81,6 @@ class TestCachedProperty(unittest.TestCase):
 
         # Run standard cache assertion
         self.assertEqual(c.add_cached, None)
-
-
-class TestThreadingIssues(unittest.TestCase):
 
     def test_threads(self):
         """ How well does this implementation work with threads?"""

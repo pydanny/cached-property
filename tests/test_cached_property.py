@@ -87,9 +87,6 @@ class TestCachedProperty(unittest.TestCase):
         # Run standard cache assertion
         self.assertEqual(c.add_cached, None)
 
-
-class TestThreadingIssues(unittest.TestCase):
-
     def test_threads(self):
         """ How well does the standard cached_property implementation work with threads?
             Short answer: It doesn't! Use threaded_cached_property instead!
