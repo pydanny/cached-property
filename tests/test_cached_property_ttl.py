@@ -71,12 +71,15 @@ class TestCachedPropertyWithTTL(unittest.TestCase):
 
         c = Check()
 
+        # Resetting the cache before it is set is a no-op
+        del c.add_cached
+
         # Run standard cache assertion
         self.assertEqual(c.add_cached, 1)
         self.assertEqual(c.add_cached, 1)
 
         # Reset the cache.
-        del c._cache['add_cached']
+        del c.add_cached
         self.assertEqual(c.add_cached, 2)
         self.assertEqual(c.add_cached, 2)
 
@@ -205,12 +208,15 @@ class TestThreadedCachedPropertyWithTTL(unittest.TestCase):
 
         c = Check()
 
+        # Resetting the cache before it is set is a no-op
+        del c.add_cached
+
         # Run standard cache assertion
         self.assertEqual(c.add_cached, 1)
         self.assertEqual(c.add_cached, 1)
 
         # Reset the cache.
-        del c._cache['add_cached']
+        del c.add_cached
         self.assertEqual(c.add_cached, 2)
         self.assertEqual(c.add_cached, 2)
 

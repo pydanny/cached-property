@@ -94,6 +94,12 @@ class cached_property_with_ttl(object):
 
         return value
 
+    def __delete__(self, obj):
+        try:
+            del obj._cache[self.__name__]
+        except (KeyError, AttributeError):
+            pass
+
 # Aliases to make cached_property_with_ttl easier to use
 cached_property_ttl = cached_property_with_ttl
 timed_cached_property = cached_property_with_ttl
