@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-tests.py
-----------------------------------
-
-Tests for `cached-property` module.
-"""
+"""Tests for cached_property"""
 
 from time import sleep
 from threading import Lock, Thread
@@ -88,10 +83,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assertEqual(c.add_cached, None)
 
     def test_threads(self):
-        """
-        How well does the standard cached_property implementation work with
-        threads? It doesn't, use threaded_cached_property instead!
-        """
+        """How well does this implementation work with threads?"""
 
         class Check(object):
 
@@ -109,8 +101,7 @@ class TestCachedProperty(unittest.TestCase):
 
         c = Check()
         threads = []
-        num_threads = 10
-        for x in range(num_threads):
+        for x in range(10):
             thread = Thread(target=lambda: c.add_cached)
             thread.start()
             threads.append(thread)
@@ -118,13 +109,4 @@ class TestCachedProperty(unittest.TestCase):
         for thread in threads:
             thread.join()
 
-        # Threads means that caching is bypassed.
-        self.assertNotEqual(c.add_cached, 1)
-
-        # This assertion hinges on the fact the system executing the test can
-        # spawn and start running num_threads threads within the sleep period
-        # (defined in the Check class as 1 second). If num_threads were to be
-        # massively increased (try 10000), the actual value returned would be
-        # between 1 and num_threads, depending on thread scheduling and
-        # preemption.
-        self.assertEqual(c.add_cached, num_threads)
+        self.assertEqual(c.add_cached, 1)
