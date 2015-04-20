@@ -23,11 +23,34 @@ class cached_property(object):
     def __get__(self, obj, cls):
         if obj is None:
             return self
-        return obj.__dict__.setdefault(self.func.__name__, self.func(obj))
+        value = obj.__dict__[self.func.__name__] = self.func(obj)
+        return value
 
 
-# Leave for backwards compatibility
-threaded_cached_property = cached_property
+class threaded_cached_property(object):
+    """
+    A cached_property version for use in environments where multiple threads
+    might concurrently try to access the property.
+    """
+
+    def __init__(self, func):
+        self.__doc__ = getattr(func, '__doc__')
+        self.func = func
+        self.lock = threading.RLock()
+
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+
+        obj_dict = obj.__dict__
+        name = self.func.__name__
+        with self.lock:
+            try:
+                # check if the value was computed before the lock was acquired
+                return obj_dict[name]
+            except KeyError:
+                # if not, do the calculation and release the lock
+                return obj_dict.setdefault(name, self.func(obj))
 
 
 class cached_property_with_ttl(object):
