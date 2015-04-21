@@ -61,22 +61,16 @@ class cached_property_with_ttl(object):
     """
 
     def __init__(self, ttl=None):
-        ttl_or_func = ttl
-        self.ttl = None
-        if callable(ttl_or_func):
-            self.prepare_func(ttl_or_func)
+        if callable(ttl):
+            func = ttl
+            ttl = None
         else:
-            self.ttl = ttl_or_func
+            func = None
+        self.ttl = ttl
+        self._prepare_func(func)
 
-    def prepare_func(self, func, doc=None):
-        '''Prepare to cache object method.'''
-        self.func = func
-        self.__doc__ = doc or func.__doc__
-        self.__name__ = func.__name__
-        self.__module__ = func.__module__
-
-    def __call__(self, func, doc=None):
-        self.prepare_func(func, doc)
+    def __call__(self, func):
+        self._prepare_func(func)
         return self
 
     def __get__(self, obj, cls):
@@ -84,25 +78,30 @@ class cached_property_with_ttl(object):
             return self
 
         now = time()
+        obj_dict = obj.__dict__
+        name = self.__name__
         try:
-            value, last_update = obj._cache[self.__name__]
-            if self.ttl and self.ttl > 0 and now - last_update > self.ttl:
-                raise AttributeError
-        except (KeyError, AttributeError):
-            value = self.func(obj)
-            try:
-                cache = obj._cache
-            except AttributeError:
-                cache = obj._cache = {}
-            cache[self.__name__] = (value, now)
+            value, last_updated = obj_dict[name]
+        except KeyError:
+            pass
+        else:
+            ttl_expired = 0 < self.ttl < now - last_updated
+            if not ttl_expired:
+                return value
 
+        value = self.func(obj)
+        obj_dict[name] = (value, now)
         return value
 
     def __delete__(self, obj):
-        try:
-            del obj._cache[self.__name__]
-        except (KeyError, AttributeError):
-            pass
+        obj.__dict__.pop(self.__name__, None)
+
+    def _prepare_func(self, func):
+        self.func = func
+        if func:
+            self.__doc__ = func.__doc__
+            self.__name__ = func.__name__
+            self.__module__ = func.__module__
 
 # Aliases to make cached_property_with_ttl easier to use
 cached_property_ttl = cached_property_with_ttl
