@@ -27,15 +27,14 @@ class cached_property(object):
         return value
 
 
-class threaded_cached_property(object):
+class threaded_cached_property(cached_property):
     """
     A cached_property version for use in environments where multiple threads
     might concurrently try to access the property.
     """
 
     def __init__(self, func):
-        self.__doc__ = getattr(func, '__doc__')
-        self.func = func
+        super(threaded_cached_property, self).__init__(func)
         self.lock = threading.RLock()
 
     def __get__(self, obj, cls):
