@@ -87,7 +87,8 @@ class TestCachedProperty(unittest.TestCase):
 
         # Typically descriptors return themselves if accessed though the class
         # rather than through an instance.
-        self.assertIsInstance(Check.add_cached, self.cached_property_factory)
+        self.assertTrue(isinstance(Check.add_cached,
+                                   self.cached_property_factory))
 
     def test_reset_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)

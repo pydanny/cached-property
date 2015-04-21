@@ -85,7 +85,7 @@ class cached_property_with_ttl(object):
         except KeyError:
             pass
         else:
-            ttl_expired = 0 < self.ttl < now - last_updated
+            ttl_expired = self.ttl and self.ttl < now - last_updated
             if not ttl_expired:
                 return value
 
