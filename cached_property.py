@@ -96,6 +96,9 @@ class cached_property_with_ttl(object):
     def __delete__(self, obj):
         obj.__dict__.pop(self.__name__, None)
 
+    def __set__(self, obj, value):
+        obj.__dict__[self.__name__] = (value, time())
+
     def _prepare_func(self, func):
         self.func = func
         if func:

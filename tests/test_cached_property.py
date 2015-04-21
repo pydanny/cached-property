@@ -116,6 +116,13 @@ class TestCachedProperty(unittest.TestCase):
 
         self.assert_cached(Check(), None)
 
+    def test_set_cached_property(self):
+        Check = CheckFactory(self.cached_property_factory)
+        check = Check()
+        check.add_cached = 'foo'
+        self.assertEqual(check.add_cached, 'foo')
+        self.assertEqual(check.cached_total, 0)
+
     def test_threads(self):
         Check = CheckFactory(self.cached_property_factory, threadsafe=True)
         check = Check()
