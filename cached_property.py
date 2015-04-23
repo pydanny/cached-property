@@ -9,6 +9,50 @@ from time import time
 import threading
 
 
+def cachedproperty(func=None, ttl=None, threadsafe=False):
+    """
+    A property that is computed at most once per instance and then replaces
+    itself with an ordinary attribute. Deleting the attribute resets the
+    property. Usage:
+
+        class Stuff(object):
+
+            # A cached property can be defined as a decorator
+            @cachedproperty
+            def foo(self):
+                ...
+
+            # ... or a decorator factory:
+            @cachedproperty(ttl=1)
+            def bar(self):
+                ...
+
+            # or explicitly by a function call:
+
+            def baz(self):
+                ...
+
+            cached_baz = cachedproperty(baz, threadsafe=True)
+
+    :param ttl: Max time (in seconds) the property can stay cached. By default
+        cached properties don't expire unless explicitly deleted.
+    :param threadsafe: Pass True if the property might be accessed concurrently
+        by multiple threads.
+    """
+    if ttl is None:
+        if not threadsafe:
+            decorator = cached_property
+        else:
+            decorator = threaded_cached_property
+    else:
+        if not threadsafe:
+            decorator = cached_property_with_ttl(ttl)
+        else:
+            decorator = threaded_cached_property_with_ttl(ttl)
+
+    return decorator(func) if func is not None else decorator
+
+
 class cached_property(object):
     """
     A property that is only computed once per instance and then replaces itself
