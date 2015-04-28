@@ -12,7 +12,7 @@ cached-property
         :target: https://pypi.python.org/pypi/cached-property
 
 
-A cached-property for decorating methods in classes.
+A decorator for caching properties in classes.
 
 Why?
 -----

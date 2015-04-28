@@ -9,7 +9,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = '1.0.0'
+__version__ = '1.2.0'
 
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
@@ -23,7 +23,7 @@ if sys.argv[-1] == 'publish':
 setup(
     name='cached-property',
     version=__version__,
-    description='A cached-property for decorating methods in classes.',
+    description='A decorator for caching properties in classes.',
     long_description=readme + '\n\n' + history,
     author='Daniel Greenfeld',
     author_email='pydanny@gmail.com',
