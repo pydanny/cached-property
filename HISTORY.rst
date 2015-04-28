@@ -6,6 +6,10 @@ History
 1.1.0 (2015-04-04)
 ++++++++++++++++++
 
+* Uncovered a bug in PyPy, https://bitbucket.org/pypy/pypy/issue/2033/attributeerror-object-attribute-is-read, thanks to @gsakkis
+* Overall code and test refactoring, thanks to @gsakkis
+* Allow the del statement for resetting cached properties with ttl instead of del obj._cache[attr], thanks to @gsakkis.
+* Fixed threaded_cached_property_with_ttl to actually be thread-safe, thanks to @gsakkis 
 * Fixed typo in README, thanks to @zoidbergwill.
 
 1.0.0 (2015-02-13)
