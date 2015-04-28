@@ -3,8 +3,8 @@
 History
 -------
 
-1.2.0 (2015-04-28
-+++++++++++++++++
+1.2.0 (2015-04-28)
+++++++++++++++++++
 
 * Overall code and test refactoring, thanks to @gsakkis
 * Allow the del statement for resetting cached properties with ttl instead of del obj._cache[attr], thanks to @gsakkis.
