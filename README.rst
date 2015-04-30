@@ -48,18 +48,18 @@ Now run it:
     >>> monopoly.boardwalk
     600
 
-Let's convert the boardwalk property into a ``cached_property``.
+Let's convert the boardwalk property into a ``cachedproperty``.
 
 .. code-block:: python
 
-    from cached_property import cached_property
+    from cached_property import cachedproperty
 
     class Monopoly(object):
 
         def __init__(self):
             self.boardwalk_price = 500
 
-        @cached_property
+        @cachedproperty
         def boardwalk(self):
             # Again, this is a silly example. Don't worry about it, this is
             #   just an example for clarity.
@@ -93,7 +93,7 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     >>> monopoly.boardwalk
     550
     >>> # invalidate the cache
-    >>> del monopoly['boardwalk']
+    >>> del monopoly.boardwalk
     >>> # request the boardwalk property again
     >>> monopoly.boardwalk
     600
@@ -104,14 +104,14 @@ Working with Threads
 ---------------------
 
 What if a whole bunch of people want to stay at Boardwalk all at once? This means using threads, which
-unfortunately causes problems with the standard ``cached_property``. In this case, switch to using the
-``threaded_cached_property``:
+unfortunately causes problems with the standard ``cachedproperty``. In this case, pass
+``threadsafe=True``:
 
 .. code-block:: python
 
     import threading
 
-    from cached_property import threaded_cached_property
+    from cached_property import cachedproperty
 
     class Monopoly(object):
 
@@ -119,12 +119,13 @@ unfortunately causes problems with the standard ``cached_property``. In this cas
             self.boardwalk_price = 500
             self.lock = threading.Lock()
 
-        @threaded_cached_property
+        @cachedproperty(threadsafe=True)
         def boardwalk(self):
-            """threaded_cached_property is really nice for when no one waits
-                for other people to finish their turn and rudely start rolling
-                dice and moving their pieces."""
-
+            """
+            threadsafe=True is really nice for when no one waits for other
+            people to finish their turn and rudely start rolling dice and
+            moving their pieces.
+            """
             sleep(1)
             # Need to guard this since += isn't atomic.
             with self.lock:
@@ -153,17 +154,17 @@ Now use it:
 Timing out the cache
 --------------------
 
-Sometimes you want the price of things to reset after a time. Use the ``ttl``
-versions of ``cached_property`` and ``threaded_cached_property``.
+Sometimes you want the price of things to reset after a time. In such cases you
+can pass ``ttl``:
 
 .. code-block:: python
 
     import random
-    from cached_property import cached_property_with_ttl
+    from cached_property import cachedproperty
 
     class Monopoly(object):
 
-        @cached_property_with_ttl(ttl=5) # cache invalidates after 5 seconds
+        @cachedproperty(ttl=5) # cache invalidates after 5 seconds
         def dice(self):
             # I dare the reader to implement a game using this method of 'rolling dice'.
             return random.randint(2,12)
@@ -184,8 +185,6 @@ Now use it:
     >>> monopoly.dice
     3
 
-**Note:** The ``ttl`` tools do not reliably allow the clearing of the cache. This
-is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
 
 Credits
 --------
