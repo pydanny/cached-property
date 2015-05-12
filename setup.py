@@ -3,6 +3,7 @@
 
 import os
 import sys
+import codecs
 
 try:
     from setuptools import setup
@@ -11,8 +12,13 @@ except ImportError:
 
 __version__ = '1.2.0'
 
-readme = open('README.rst').read()
-history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+
+def read(fname):
+    return codecs.open(
+        os.path.join(os.path.dirname(__file__), fname), 'r', 'utf-8').read()
+
+readme = read('README.rst')
+history = read('HISTORY.rst').replace('.. :changelog:', '')
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist bdist_wheel upload')
