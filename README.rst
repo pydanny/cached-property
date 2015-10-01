@@ -109,15 +109,12 @@ unfortunately causes problems with the standard ``cached_property``. In this cas
 
 .. code-block:: python
 
-    import threading
-
     from cached_property import threaded_cached_property
 
     class Monopoly(object):
 
         def __init__(self):
             self.boardwalk_price = 500
-            self.lock = threading.Lock()
 
         @threaded_cached_property
         def boardwalk(self):
