@@ -126,9 +126,7 @@ unfortunately causes problems with the standard ``cached_property``. In this cas
                 dice and moving their pieces."""
 
             sleep(1)
-            # Need to guard this since += isn't atomic.
-            with self.lock:
-                self.boardwalk_price += 50
+            self.boardwalk_price += 50
             return self.boardwalk_price
 
 Now use it:
