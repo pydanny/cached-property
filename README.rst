@@ -93,7 +93,7 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
     >>> monopoly.boardwalk
     550
     >>> # invalidate the cache
-    >>> del monopoly['boardwalk']
+    >>> del monopoly.__dict__['boardwalk']
     >>> # request the boardwalk property again
     >>> monopoly.boardwalk
     600
