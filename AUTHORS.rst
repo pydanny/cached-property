@@ -5,7 +5,8 @@ Credits
 Development Lead
 ----------------
 
-* Daniel Greenfeld <pydanny@gmail.com>
+* Daniel Roy Greenfeld <pydanny@gmail.com>
+* Audrey Roy Greenfeld (@audreyr)
 
 Contributors
 ------------

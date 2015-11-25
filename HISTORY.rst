@@ -6,9 +6,10 @@ History
 1.3.0 (2015-11-24)
 ++++++++++++++++++
 
-* Added official support for Python 3, thanks to @pydanny
+* Added official support for Python 3.5, thanks to @pydanny and @audreyr
 * Removed confusingly placed lock from example, thanks to @ionelmc
 * Corrected invalidation cache documentation, thanks to @proofit404
+* Updated to latest Travis-CI environment, thanks to @audreyr
 
 1.2.0 (2015-04-28)
 ++++++++++++++++++
