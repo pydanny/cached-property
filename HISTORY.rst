@@ -3,10 +3,12 @@
 History
 -------
 
-1.2.1 (2015-11-??)
+1.3.0 (2015-11-24)
 ++++++++++++++++++
 
+* Added official support for Python 3, thanks to @pydanny
 * Removed confusingly placed lock from example, thanks to @ionelmc
+* Corrected invalidation cache documentation, thanks to @proofit404
 
 1.2.0 (2015-04-28)
 ++++++++++++++++++

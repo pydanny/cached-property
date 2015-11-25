@@ -15,3 +15,4 @@ Contributors
 * George Sakkis (@gsakkis)
 * Adam Williamson <awilliam AT redhat DOT com>
 * Ionel Cristian Mărieș (@ionelmc)
+* Malyshev Artem (@proofit404)
