@@ -109,15 +109,12 @@ unfortunately causes problems with the standard ``cached_property``. In this cas
 
 .. code-block:: python
 
-    import threading
-
     from cached_property import threaded_cached_property
 
     class Monopoly(object):
 
         def __init__(self):
             self.boardwalk_price = 500
-            self.lock = threading.Lock()
 
         @threaded_cached_property
         def boardwalk(self):
@@ -126,9 +123,7 @@ unfortunately causes problems with the standard ``cached_property``. In this cas
                 dice and moving their pieces."""
 
             sleep(1)
-            # Need to guard this since += isn't atomic.
-            with self.lock:
-                self.boardwalk_price += 50
+            self.boardwalk_price += 50
             return self.boardwalk_price
 
 Now use it:
