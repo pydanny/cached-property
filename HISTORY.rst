@@ -6,6 +6,7 @@ History
 1.3.0 (2015-11-24)
 ++++++++++++++++++
 
+* Drop some non-ASCII characters from HISTORY.rst, thanks to @AdamWill
 * Added official support for Python 3.5, thanks to @pydanny and @audreyr
 * Removed confusingly placed lock from example, thanks to @ionelmc
 * Corrected invalidation cache documentation, thanks to @proofit404

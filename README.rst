@@ -193,3 +193,14 @@ Credits
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`cookiecutter`: https://github.com/audreyr/cookiecutter
+
+Support This Project
+---------------------------
+
+This project is maintained by volunteers. Support their efforts by spreading the word about:
+
+.. image:: https://s3.amazonaws.com/tsacademy/images/tsa-logo-250x60-transparent-01.png
+   :name: Two Scoops Academy
+   :align: center
+   :alt: Two Scoops Academy
+   :target: http://www.twoscoops.academy/
