@@ -2,10 +2,10 @@
 cached-property
 ===============================
 
-.. image:: https://badge.fury.io/py/cached-property.png
-    :target: http://badge.fury.io/py/cached-property
+.. image:: https://img.shields.io/pypi/v/cached-property.svg
+    :target: https://pypi.python.org/pypi/cached-property
 
-.. image:: https://travis-ci.org/pydanny/cached-property.png?branch=master
+.. image:: https://img.shields.io/travis/pydanny/cached-property/master.svg
         :target: https://travis-ci.org/pydanny/cached-property
 
 
@@ -21,7 +21,7 @@ Why?
 How to use it
 --------------
 
-Let's define a class with an expensive property. Every time you stay there the 
+Let's define a class with an expensive property. Every time you stay there the
 price goes up by $50!
 
 .. code-block:: python
@@ -33,7 +33,7 @@ price goes up by $50!
 
         @property
         def boardwalk(self):
-            # In reality, this might represent a database call or time 
+            # In reality, this might represent a database call or time
             # intensive task like calling a third-party API.
             self.boardwalk_price += 50
             return self.boardwalk_price
