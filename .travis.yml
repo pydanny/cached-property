@@ -1,9 +1,9 @@
 # Config file for automatic testing at travis-ci.org
-
+sudo: false
 language: python
 
 python:
-  - "3.5"  
+  - "3.5"
   - "3.4"
   - "3.3"
   - "2.7"
