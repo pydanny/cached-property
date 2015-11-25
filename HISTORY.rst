@@ -3,6 +3,11 @@
 History
 -------
 
+1.2.1 (2015-11-??)
+++++++++++++++++++
+
+* Removed confusingly placed lock from example, thanks to @ionelmc
+
 1.2.0 (2015-04-28)
 ++++++++++++++++++
 

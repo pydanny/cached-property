@@ -14,3 +14,4 @@ Contributors
 * @bcho <bcho@vtmer.com>
 * George Sakkis (@gsakkis)
 * Adam Williamson <awilliam AT redhat DOT com>
+* Ionel Cristian Mărieș (@ionelmc)
