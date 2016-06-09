@@ -1,6 +1,6 @@
 # Testing and deployment packages.
 coverage==4.1
-pytest
+pytest==2.9.2
 pytest-cov
 freezegun
 wheel==0.23.0
