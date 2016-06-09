@@ -1,5 +1,5 @@
 # Testing and deployment packages.
-coverage
+coverage==4.1
 pytest
 pytest-cov
 freezegun
