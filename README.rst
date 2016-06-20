@@ -189,7 +189,7 @@ is why they are broken out into seperate tools. See https://github.com/pydanny/c
 Credits
 --------
 
-* Pip, Django, Werkzueg, Bottle, Pyramid, and Zope for having their own implementations. This package uses an implementation that matches the Bottle version.
+* Pip, Django, Werkzueg, Bottle, Pyramid, and Zope for having their own implementations. This package originally used an implementation that matched the Bottle version.
 * Reinout Van Rees for pointing out the `cached_property` decorator to me.
 * My awesome wife `@audreyr`_ who created `cookiecutter`_, which meant rolling this out took me just 15 minutes.
 * @tinche for pointing out the threading issue and providing a solution.
