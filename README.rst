@@ -2,10 +2,6 @@
 cached-property
 ===============================
 
-.. image:: https://pyup.io/repos/github/pydanny/cookiecutter-djangopackage/shield.svg
-     :target: https://pyup.io/repos/github/pydanny/cookiecutter-djangopackage/
-     :alt: Updates
-
 .. image:: https://img.shields.io/pypi/v/cached-property.svg
     :target: https://pypi.python.org/pypi/cached-property
 
