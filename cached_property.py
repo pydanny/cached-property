@@ -9,58 +9,21 @@ from time import time
 import threading
 
 
-class cached_property(object):
-    """
-    A property that is only computed once per instance and then replaces itself
-    with an ordinary attribute. Deleting the attribute resets the property.
-    Source: https://github.com/bottlepy/bottle/commit/fa7733e075da0d790d809aa3d2f53071897e6f76
-    """  # noqa
-
-    def __init__(self, func):
-        self.__doc__ = getattr(func, '__doc__')
-        self.func = func
-
-    def __get__(self, obj, cls):
-        if obj is None:
-            return self
-        value = obj.__dict__[self.func.__name__] = self.func(obj)
-        return value
+class DummyLock(object):
+    def __enter__(self):
+        return self
+    def __exit__(self, *args):
+        pass
 
 
-class threaded_cached_property(object):
-    """
-    A cached_property version for use in environments where multiple threads
-    might concurrently try to access the property.
-    """
-
-    def __init__(self, func):
-        self.__doc__ = getattr(func, '__doc__')
-        self.func = func
-        self.lock = threading.RLock()
-
-    def __get__(self, obj, cls):
-        if obj is None:
-            return self
-
-        obj_dict = obj.__dict__
-        name = self.func.__name__
-        with self.lock:
-            try:
-                # check if the value was computed before the lock was acquired
-                return obj_dict[name]
-            except KeyError:
-                # if not, do the calculation and release the lock
-                return obj_dict.setdefault(name, self.func(obj))
-
-
-class cached_property_with_ttl(object):
+class CachedProperty(object):
     """
     A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Setting the ttl to a number expresses how long
     the property will last before being timed out.
     """
 
-    def __init__(self, ttl=None):
+    def __init__(self, ttl=None, threaded=False):
         if callable(ttl):
             func = ttl
             ttl = None
@@ -68,6 +31,19 @@ class cached_property_with_ttl(object):
             func = None
         self.ttl = ttl
         self._prepare_func(func)
+        self.cached_time = None
+        self.cached = None
+        if threaded:
+            self.lock = threading.RLock()
+        else:
+            self.lock = DummyLock()
+
+    def _prepare_func(self, func):
+        if func:
+            self.__doc__ = func.__doc__
+            self.__name__ = func.__name__
+            self.__module__ = func.__module__
+        self.func = func
 
     def __call__(self, func):
         self._prepare_func(func)
@@ -77,34 +53,34 @@ class cached_property_with_ttl(object):
         if obj is None:
             return self
 
-        now = time()
         obj_dict = obj.__dict__
         name = self.__name__
-        try:
-            value, last_updated = obj_dict[name]
-        except KeyError:
-            pass
-        else:
-            ttl_expired = self.ttl and self.ttl < now - last_updated
+        with self.lock:
+            now = time()
+            ttl_expired = self.cached_time is None or self.ttl and self.ttl < now - self.cached_time
             if not ttl_expired:
-                return value
-
-        value = self.func(obj)
-        obj_dict[name] = (value, now)
-        return value
+                return self.cached
+            self.cached = self.func(obj)
+            self.cached_time = now
+            return self.cached
 
     def __delete__(self, obj):
-        obj.__dict__.pop(self.__name__, None)
+        self.cached = None
+        self.cached_time = None
 
     def __set__(self, obj, value):
-        obj.__dict__[self.__name__] = (value, time())
+        self.cached = value
+        self.cached_time = time()
 
-    def _prepare_func(self, func):
-        self.func = func
-        if func:
-            self.__doc__ = func.__doc__
-            self.__name__ = func.__name__
-            self.__module__ = func.__module__
+cached_property = CachedProperty
+
+class cached_property_with_ttl(CachedProperty):
+    pass
+
+class threaded_cached_property(CachedProperty):
+    def __init__(self, func_or_ttl):
+        super(threaded_cached_property, self).__init__(func_or_ttl, threaded=True)
+
 
 # Aliases to make cached_property_with_ttl easier to use
 cached_property_ttl = cached_property_with_ttl
