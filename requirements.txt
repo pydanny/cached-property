@@ -3,4 +3,4 @@ coverage==4.1
 pytest==2.9.2
 pytest-cov==2.4.0
 freezegun==0.3.7
-wheel==0.29.0
+wheel==0.30.0
