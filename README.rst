@@ -199,8 +199,8 @@ Support This Project
 
 This project is maintained by volunteers. Support their efforts by spreading the word about:
 
-.. image:: https://s3.amazonaws.com/tsacademy/images/tsa-logo-250x60-transparent-01.png
-   :name: Two Scoops Academy
+.. image:: https://cdn.shopify.com/s/files/1/0304/6901/t/2/assets/logo.png?8399580890922549623
+   :name: Two Scoops Press
    :align: center
-   :alt: Two Scoops Academy
-   :target: http://www.twoscoops.academy/
+   :alt: Two Scoops Press
+   :target: https://www.twoscoopspress.com
