@@ -145,6 +145,49 @@ Now use it:
     >>> self.assertEqual(m.boardwalk, 550)
 
 
+Working with async/await (Python 3.5+)
+--------------------------------------
+
+The cached property can be async, in which case you have to use await
+as usual to get the value. Because of the caching, the value is only
+computed once and then cached:
+
+.. code-block:: python
+
+    from cached_property import cached_property
+
+    class Monopoly(object):
+
+        def __init__(self):
+            self.boardwalk_price = 500
+
+        @cached_property
+        async def boardwalk(self):
+            self.boardwalk_price += 50
+            return self.boardwalk_price
+
+Now use it:
+
+.. code-block:: python
+
+    >>> async def print_boardwalk():
+    ...     monopoly = Monopoly()
+    ...     print(await monopoly.boardwalk)
+    ...     print(await monopoly.boardwalk)
+    ...     print(await monopoly.boardwalk)
+    >>> import asyncio
+    >>> asyncio.get_event_loop().run_until_complete(print_boardwalk())
+    550
+    550
+    550
+
+Note that this does not work with threading either, most asyncio
+objects are not thread-safe. And if you run separate event loops in
+each thread, the cached version will most likely have the wrong event
+loop. To summarize, either use cooperative multitasking (event loop)
+or threading, but not both at the same time.
+
+
 Timing out the cache
 --------------------
 

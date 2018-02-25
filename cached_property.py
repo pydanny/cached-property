@@ -7,6 +7,10 @@ __license__ = 'BSD'
 
 from time import time
 import threading
+try:
+    import asyncio
+except ImportError:
+    asyncio = None
 
 
 class cached_property(object):
@@ -23,8 +27,18 @@ class cached_property(object):
     def __get__(self, obj, cls):
         if obj is None:
             return self
+        if asyncio and asyncio.iscoroutinefunction(self.func):
+            return self._wrap_in_coroutine(obj)
         value = obj.__dict__[self.func.__name__] = self.func(obj)
         return value
+
+    def _wrap_in_coroutine(self, obj):
+        @asyncio.coroutine
+        def wrapper():
+            future = asyncio.ensure_future(self.func(obj))
+            obj.__dict__[self.func.__name__] = future
+            return future
+        return wrapper()
 
 
 class threaded_cached_property(object):
