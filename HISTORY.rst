@@ -3,6 +3,13 @@
 History
 -------
 
+1.4.0 (2018-02-25)
+++++++++++++++++++
+
+* Added asyncio support, thanks to @vbraun
+* Remove Python 2.6 support, whose end of life was 5 years ago, thanks to @pydanny
+
+
 1.3.1 (2017-09-21)
 ++++++++++++++++++
 

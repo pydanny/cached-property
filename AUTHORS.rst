@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Daniel Roy Greenfeld <pydanny@gmail.com>
+* Daniel Roy Greenfeld (@pydanny)
 * Audrey Roy Greenfeld (@audreyr)
 
 Contributors
@@ -17,3 +17,4 @@ Contributors
 * Adam Williamson <awilliam AT redhat DOT com>
 * Ionel Cristian Mărieș (@ionelmc)
 * Malyshev Artem (@proofit404)
+* Volker Braun (@vbraun)
