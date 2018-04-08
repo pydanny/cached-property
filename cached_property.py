@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'Daniel Greenfeld'
-__email__ = 'pydanny@gmail.com'
-__version__ = '1.4.0'
-__license__ = 'BSD'
+__author__ = "Daniel Greenfeld"
+__email__ = "pydanny@gmail.com"
+__version__ = "1.4.1"
+__license__ = "BSD"
 
 from time import time
 import threading
+
 try:
     import asyncio
 except ImportError:
@@ -21,23 +22,27 @@ class cached_property(object):
     """  # noqa
 
     def __init__(self, func):
-        self.__doc__ = getattr(func, '__doc__')
+        self.__doc__ = getattr(func, "__doc__")
         self.func = func
 
     def __get__(self, obj, cls):
         if obj is None:
             return self
+
         if asyncio and asyncio.iscoroutinefunction(self.func):
             return self._wrap_in_coroutine(obj)
+
         value = obj.__dict__[self.func.__name__] = self.func(obj)
         return value
 
     def _wrap_in_coroutine(self, obj):
+
         @asyncio.coroutine
         def wrapper():
             future = asyncio.ensure_future(self.func(obj))
             obj.__dict__[self.func.__name__] = future
             return future
+
         return wrapper()
 
 
@@ -48,7 +53,7 @@ class threaded_cached_property(object):
     """
 
     def __init__(self, func):
-        self.__doc__ = getattr(func, '__doc__')
+        self.__doc__ = getattr(func, "__doc__")
         self.func = func
         self.lock = threading.RLock()
 
@@ -62,6 +67,7 @@ class threaded_cached_property(object):
             try:
                 # check if the value was computed before the lock was acquired
                 return obj_dict[name]
+
             except KeyError:
                 # if not, do the calculation and release the lock
                 return obj_dict.setdefault(name, self.func(obj))
@@ -120,6 +126,7 @@ class cached_property_with_ttl(object):
             self.__name__ = func.__name__
             self.__module__ = func.__module__
 
+
 # Aliases to make cached_property_with_ttl easier to use
 cached_property_ttl = cached_property_with_ttl
 timed_cached_property = cached_property_with_ttl
@@ -137,8 +144,8 @@ class threaded_cached_property_with_ttl(cached_property_with_ttl):
 
     def __get__(self, obj, cls):
         with self.lock:
-            return super(threaded_cached_property_with_ttl, self).__get__(obj,
-                                                                          cls)
+            return super(threaded_cached_property_with_ttl, self).__get__(obj, cls)
+
 
 # Alias to make threaded_cached_property_with_ttl easier to use
 threaded_cached_property_ttl = threaded_cached_property_with_ttl

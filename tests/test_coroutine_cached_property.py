@@ -13,11 +13,13 @@ import cached_property
 
 
 def unittest_run_loop(f):
+
     def wrapper(*args, **kwargs):
         coro = asyncio.coroutine(f)
         future = coro(*args, **kwargs)
         loop = asyncio.get_event_loop()
         loop.run_until_complete(future)
+
     return wrapper
 
 
@@ -66,7 +68,7 @@ class TestCachedProperty(unittest.TestCase):
         """
         Assert that both `add_cached` and 'cached_total` equal `expected`
         """
-        print('assert_cached', check.add_cached)
+        print("assert_cached", check.add_cached)
         value = yield from check.add_cached
         self.assertEqual(value, expected)
         self.assertEqual(check.cached_total, expected)
@@ -91,8 +93,7 @@ class TestCachedProperty(unittest.TestCase):
 
         # Typically descriptors return themselves if accessed though the class
         # rather than through an instance.
-        self.assertTrue(isinstance(Check.add_cached,
-                                   self.cached_property_factory))
+        self.assertTrue(isinstance(Check.add_cached, self.cached_property_factory))
 
     @unittest_run_loop
     @asyncio.coroutine
@@ -114,6 +115,7 @@ class TestCachedProperty(unittest.TestCase):
     @unittest_run_loop
     @asyncio.coroutine
     def test_none_cached_property(self):
+
         class Check(object):
 
             def __init__(self):

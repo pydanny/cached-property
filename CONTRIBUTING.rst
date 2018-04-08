@@ -74,21 +74,25 @@ Ready to contribute? Here's how to set up `cached-property` for local developmen
    
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
+   
+5. Clean up the formatting::
+  
+    $ black .
+   
+6. When you're done making changes, check that your changes pass the tests, including testing other Python versions with tox::
 
-    $ flake8 cached-property tests
     $ python setup.py test
     $ tox
 
    To get flake8 and tox, just pip install them into your virtualenv. 
 
-6. Commit your changes and push your branch to GitHub::
+7. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the GitHub website.
+8. Submit a pull request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------

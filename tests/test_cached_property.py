@@ -87,8 +87,7 @@ class TestCachedProperty(unittest.TestCase):
 
         # Typically descriptors return themselves if accessed though the class
         # rather than through an instance.
-        self.assertTrue(isinstance(Check.add_cached,
-                                   self.cached_property_factory))
+        self.assertTrue(isinstance(Check.add_cached, self.cached_property_factory))
 
     def test_reset_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)
@@ -106,6 +105,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assert_cached(check, 2)
 
     def test_none_cached_property(self):
+
         class Check(object):
 
             def __init__(self):
@@ -120,8 +120,8 @@ class TestCachedProperty(unittest.TestCase):
     def test_set_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)
         check = Check()
-        check.add_cached = 'foo'
-        self.assertEqual(check.add_cached, 'foo')
+        check.add_cached = "foo"
+        self.assertEqual(check.add_cached, "foo")
         self.assertEqual(check.cached_total, 0)
 
     def test_threads(self):
@@ -192,8 +192,7 @@ class TestCachedPropertyWithTTL(TestCachedProperty):
         self.assert_cached(check, 2)
 
     def test_threads_ttl_expiry(self):
-        Check = CheckFactory(self.cached_property_factory(ttl=100000),
-                             threadsafe=True)
+        Check = CheckFactory(self.cached_property_factory(ttl=100000), threadsafe=True)
         check = Check()
         num_threads = 5
 
@@ -213,15 +212,15 @@ class TestCachedPropertyWithTTL(TestCachedProperty):
         self.assert_cached(check, 2 * num_threads)
 
 
-class TestThreadedCachedPropertyWithTTL(TestThreadedCachedProperty,
-                                        TestCachedPropertyWithTTL):
+class TestThreadedCachedPropertyWithTTL(
+    TestThreadedCachedProperty, TestCachedPropertyWithTTL
+):
     """Tests for threaded_cached_property_with_ttl"""
 
     cached_property_factory = cached_property.threaded_cached_property_with_ttl
 
     def test_threads_ttl_expiry(self):
-        Check = CheckFactory(self.cached_property_factory(ttl=100000),
-                             threadsafe=True)
+        Check = CheckFactory(self.cached_property_factory(ttl=100000), threadsafe=True)
         check = Check()
         num_threads = 5
 

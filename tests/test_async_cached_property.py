@@ -9,15 +9,15 @@ try:
     from freezegun import freeze_time
     import cached_property
 
-
     def unittest_run_loop(f):
+
         def wrapper(*args, **kwargs):
             coro = asyncio.coroutine(f)
             future = coro(*args, **kwargs)
             loop = asyncio.get_event_loop()
             loop.run_until_complete(future)
-        return wrapper
 
+        return wrapper
 
     def CheckFactory(cached_property_decorator, threadsafe=False):
         """
@@ -51,10 +51,12 @@ try:
             def run_threads(self, num_threads):
                 threads = []
                 for _ in range(num_threads):
+
                     def call_add_cached():
                         loop = asyncio.new_event_loop()
                         asyncio.set_event_loop(loop)
                         loop.run_until_complete(self.add_cached)
+
                     thread = Thread(target=call_add_cached)
                     thread.start()
                     threads.append(thread)
@@ -62,7 +64,6 @@ try:
                     thread.join()
 
         return Check
-
 
     class TestCachedProperty(unittest.TestCase):
         """Tests for cached_property"""
@@ -80,7 +81,7 @@ try:
             """
             Assert that both `add_cached` and 'cached_total` equal `expected`
             """
-            print('assert_cached', check.add_cached)
+            print("assert_cached", check.add_cached)
             self.assertEqual(await check.add_cached, expected)
             self.assertEqual(check.cached_total, expected)
 
@@ -103,8 +104,7 @@ try:
 
             # Typically descriptors return themselves if accessed though the class
             # rather than through an instance.
-            self.assertTrue(isinstance(Check.add_cached,
-                                       self.cached_property_factory))
+            self.assertTrue(isinstance(Check.add_cached, self.cached_property_factory))
 
         @unittest_run_loop
         async def test_reset_cached_property(self):
@@ -124,6 +124,7 @@ try:
 
         @unittest_run_loop
         async def test_none_cached_property(self):
+
             class Check(object):
 
                 def __init__(self):
@@ -135,7 +136,6 @@ try:
 
             await self.assert_cached(Check(), None)
 
-        
+
 except ImportError:
     pass  # Running older version of Python that doesn't support asyncio
-        
