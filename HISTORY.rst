@@ -3,10 +3,18 @@
 History
 -------
 
-1.4.1 (2018-02-26)
+1.4.2 (2018-03-08)
+++++++++++++++++++
+
+* Really fixed tests, thanks to @pydanny
+
+1.4.1 (2018-03-08)
 ++++++++++++++++++
 
 * Added conftest.py to manifest so tests work properly off the tarball, thanks to @dotlambda
+* Ensured new asyncio tests didn't break Python 2.7 builds on Debian, thanks to @pydanny
+* Code formatting via black, thanks to @pydanny and @ambv
+
 
 1.4.0 (2018-02-25)
 ++++++++++++++++++
