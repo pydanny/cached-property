@@ -75,16 +75,17 @@ Ready to contribute? Here's how to set up `cached-property` for local developmen
    Now you can make your changes locally.
 
    
-5. Clean up the formatting::
+5. Clean up the formatting (must be running at least Python 3.6)::
   
+    $ pip install -U black
     $ black .
    
 6. When you're done making changes, check that your changes pass the tests, including testing other Python versions with tox::
 
-    $ python setup.py test
+    $ pytest tests/
     $ tox
 
-   To get flake8 and tox, just pip install them into your virtualenv. 
+   To get tox, just pip install it into your virtualenv. 
 
 7. Commit your changes and push your branch to GitHub::
 
