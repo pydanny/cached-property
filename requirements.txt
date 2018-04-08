@@ -1,5 +1,4 @@
 # Testing and deployment packages.
-black==18.4a0
 coverage==4.4.2
 pytest==3.5.0
 pytest-cov==2.5.1
