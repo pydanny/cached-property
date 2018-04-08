@@ -3,7 +3,12 @@
 History
 -------
 
-1.4.1 (2018-02-26)
+1.4.2 (2018-03-08)
+++++++++++++++++++
+
+* Really fixed tests, thanks to @pydanny
+
+1.4.1 (2018-03-08)
 ++++++++++++++++++
 
 * Added conftest.py to manifest so tests work properly off the tarball, thanks to @dotlambda
