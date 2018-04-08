@@ -7,6 +7,10 @@ cached-property
 
 .. image:: https://img.shields.io/travis/pydanny/cached-property/master.svg
         :target: https://travis-ci.org/pydanny/cached-property
+        
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/ambv/black
+    :alt: Code style: black        
 
 
 A decorator for caching properties in classes.
