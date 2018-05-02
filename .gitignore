@@ -43,3 +43,11 @@ output/*/index.html
 
 # Sphinx
 docs/_build
+
+# IntelliJ IDEA
+/.idea/
+/out/
+*.iml
+
+# Local virtualenv directories
+/venv*/
