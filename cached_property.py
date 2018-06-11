@@ -10,7 +10,7 @@ import threading
 
 try:
     import asyncio
-except ImportError:
+except (ImportError, SyntaxError):
     asyncio = None
 
 
