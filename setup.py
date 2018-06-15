@@ -23,6 +23,7 @@ readme = read("README.rst")
 history = read("HISTORY.rst").replace(".. :changelog:", "")
 
 if sys.argv[-1] == "publish":
+    os.system("rm -rf dist")
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
