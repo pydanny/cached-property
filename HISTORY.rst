@@ -3,6 +3,11 @@
 History
 -------
 
+1.4.3 (2018-06-14)
+++++++++++++++++++
+
+* Catch `SyntaxError` from asyncio import on older versions of Python, thanks to @asottile
+
 1.4.2 (2018-04-08)
 ++++++++++++++++++
 

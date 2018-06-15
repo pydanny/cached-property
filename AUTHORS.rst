@@ -18,3 +18,4 @@ Contributors
 * Ionel Cristian Mărieș (@ionelmc)
 * Malyshev Artem (@proofit404)
 * Volker Braun (@vbraun)
+* Anthony Sottile (@asottile)
