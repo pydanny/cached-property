@@ -10,7 +10,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = "1.4.2"
+__version__ = "1.4.3"
 
 
 def read(fname):
