@@ -3,14 +3,14 @@
 History
 -------
 
-1.5.0 (2018-08-05)
+1.5.1 (2018-08-05)
 ++++++++++++++++++
 
 * Added formal support for Python 3.7
 * Removed formal support for Python 3.3
 
 1.4.3  (2018-06-14)
-++++++++++++++++++
++++++++++++++++++++
 
 * Catch SyntaxError from asyncio import on older versions of Python, thanks to @asottile
 
