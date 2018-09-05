@@ -1,7 +1,7 @@
 # Testing and deployment packages.
 coverage==4.4.2
-pytest==3.6.1
-pytest-cov==2.5.1
+pytest==3.7.4
+pytest-cov==2.6.0
 freezegun==0.3.10
 twine==1.11.0
 wheel==0.31.1
