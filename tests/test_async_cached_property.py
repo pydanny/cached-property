@@ -6,8 +6,8 @@ from threading import Lock, Thread
 from freezegun import freeze_time
 import cached_property
 
-def unittest_run_loop(f):
 
+def unittest_run_loop(f):
     def wrapper(*args, **kwargs):
         coro = asyncio.coroutine(f)
         future = coro(*args, **kwargs)
@@ -16,6 +16,7 @@ def unittest_run_loop(f):
 
     return wrapper
 
+
 def CheckFactory(cached_property_decorator, threadsafe=False):
     """
     Create dynamically a Check class whose add_cached method is decorated by
@@ -23,7 +24,6 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
     """
 
     class Check(object):
-
         def __init__(self):
             self.control_total = 0
             self.cached_total = 0
@@ -61,6 +61,7 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
                 thread.join()
 
     return Check
+
 
 class TestCachedProperty(unittest.TestCase):
     """Tests for cached_property"""
@@ -121,9 +122,7 @@ class TestCachedProperty(unittest.TestCase):
 
     @unittest_run_loop
     async def test_none_cached_property(self):
-
         class Check(object):
-
             def __init__(self):
                 self.cached_total = None
 
@@ -131,4 +130,4 @@ class TestCachedProperty(unittest.TestCase):
             async def add_cached(self):
                 return self.cached_total
 
-        await self.assert_cached(Check(), None)  
+        await self.assert_cached(Check(), None)

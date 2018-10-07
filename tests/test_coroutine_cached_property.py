@@ -13,7 +13,6 @@ import cached_property
 
 
 def unittest_run_loop(f):
-
     def wrapper(*args, **kwargs):
         coro = asyncio.coroutine(f)
         future = coro(*args, **kwargs)
@@ -30,7 +29,6 @@ def CheckFactory(cached_property_decorator):
     """
 
     class Check(object):
-
         def __init__(self):
             self.control_total = 0
             self.cached_total = 0
@@ -115,9 +113,7 @@ class TestCachedProperty(unittest.TestCase):
     @unittest_run_loop
     @asyncio.coroutine
     def test_none_cached_property(self):
-
         class Check(object):
-
             def __init__(self):
                 self.cached_total = None
 

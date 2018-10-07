@@ -2,10 +2,10 @@
 import sys
 
 # Whether "import asyncio" works
-has_asyncio = (sys.version_info[0] == 3 and sys.version_info[1] >= 4)
+has_asyncio = sys.version_info[0] == 3 and sys.version_info[1] >= 4
 
 # Whether the async and await keywords work
-has_async_await = (sys.version_info[0] == 3 and sys.version_info[1] >= 5)
+has_async_await = sys.version_info[0] == 3 and sys.version_info[1] >= 5
 
 
 print("conftest.py", has_asyncio, has_async_await)

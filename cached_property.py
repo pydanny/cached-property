@@ -36,7 +36,6 @@ class cached_property(object):
         return value
 
     def _wrap_in_coroutine(self, obj):
-
         @asyncio.coroutine
         def wrapper():
             future = asyncio.ensure_future(self.func(obj))

@@ -15,7 +15,6 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
     """
 
     class Check(object):
-
         def __init__(self):
             self.control_total = 0
             self.cached_total = 0
@@ -105,9 +104,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assert_cached(check, 2)
 
     def test_none_cached_property(self):
-
         class Check(object):
-
             def __init__(self):
                 self.cached_total = None
 
