@@ -24,6 +24,10 @@ class cached_property(object):
     def __init__(self, func):
         self.__doc__ = getattr(func, "__doc__")
         self.func = func
+        self.name = func.__name__
+
+    def __set_name__(self, owner, name):
+        self.name = name
 
     def __get__(self, obj, cls):
         if obj is None:
@@ -32,7 +36,7 @@ class cached_property(object):
         if asyncio and asyncio.iscoroutinefunction(self.func):
             return self._wrap_in_coroutine(obj)
 
-        value = obj.__dict__[self.func.__name__] = self.func(obj)
+        value = obj.__dict__[self.name] = self.func(obj)
         return value
 
     def _wrap_in_coroutine(self, obj):
@@ -40,7 +44,7 @@ class cached_property(object):
         @asyncio.coroutine
         def wrapper():
             future = asyncio.ensure_future(self.func(obj))
-            obj.__dict__[self.func.__name__] = future
+            obj.__dict__[self.name] = future
             return future
 
         return wrapper()
@@ -56,21 +60,24 @@ class threaded_cached_property(object):
         self.__doc__ = getattr(func, "__doc__")
         self.func = func
         self.lock = threading.RLock()
+        self.name = func.__name__
+
+    def __set_name__(self, owner, name):
+        self.name = name
 
     def __get__(self, obj, cls):
         if obj is None:
             return self
 
         obj_dict = obj.__dict__
-        name = self.func.__name__
         with self.lock:
             try:
                 # check if the value was computed before the lock was acquired
-                return obj_dict[name]
+                return obj_dict[self.name]
 
             except KeyError:
                 # if not, do the calculation and release the lock
-                return obj_dict.setdefault(name, self.func(obj))
+                return obj_dict.setdefault(self.name, self.func(obj))
 
 
 class cached_property_with_ttl(object):
@@ -88,6 +95,9 @@ class cached_property_with_ttl(object):
             func = None
         self.ttl = ttl
         self._prepare_func(func)
+
+    def __set_name__(self, owner, name):
+        self.__name__ = name
 
     def __call__(self, func):
         self._prepare_func(func)
