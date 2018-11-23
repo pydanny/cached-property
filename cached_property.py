@@ -6,6 +6,7 @@ __version__ = "1.5.1"
 __license__ = "BSD"
 
 import functools
+import sys
 import threading
 import weakref
 from time import time
@@ -25,10 +26,21 @@ class cached_property(property):
 
     _sentinel = object()
 
+    if sys.version_info[0] < 3:
+
+        def _update_wrapper(self, func):
+            self.__doc__ = getattr(func, "__doc__", None)
+            self.__module__ = getattr(func, "__module__", None)
+            self.__name__ = getattr(func, "__name__", None)
+
+    else:
+
+        _update_wrapper = functools.update_wrapper
+
     def __init__(self, func):
         self.cache = weakref.WeakKeyDictionary()
         self.func = func
-        functools.update_wrapper(self, func)
+        self._update_wrapper(func)
 
     def __get__(self, obj, cls):
         if obj is None:
@@ -53,7 +65,7 @@ class cached_property(property):
         del self.cache[obj]
 
     def _wrap_in_coroutine(self, obj):
-
+        
         @asyncio.coroutine
         def wrapper():
             value = self.cache.get(obj, self._sentinel)
