@@ -40,7 +40,7 @@ class cached_property(property):
         return self.value
 
     def __getattribute__(self, name):
-        if name in ('__doc__', '__name__', '__module__'):
+        if name in ("__doc__", "__name__", "__module__"):
             return getattr(self.func, name)
         return super(cached_property, self).__getattribute__(name)
 
@@ -127,7 +127,9 @@ cached_property_ttl = cached_property_with_ttl
 timed_cached_property = cached_property_with_ttl
 
 
-class threaded_cached_property_with_ttl(cached_property_with_ttl, threaded_cached_property):
+class threaded_cached_property_with_ttl(
+    cached_property_with_ttl, threaded_cached_property
+):
     """
     A cached_property version for use in environments where multiple threads
     might concurrently try to access the property.
