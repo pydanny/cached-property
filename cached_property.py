@@ -5,9 +5,9 @@ __email__ = "pydanny@gmail.com"
 __version__ = "1.5.1"
 __license__ = "BSD"
 
-from time import time
 import functools
 import threading
+from time import time
 
 try:
     import asyncio
@@ -26,9 +26,6 @@ class cached_property(property):
         self.value = self._sentinel = object()
         self.func = func
         functools.wraps(func, self)
-        # self.__name__ = getattr(func, '__name__', None)
-        # self.__doc__ = getattr(func, '__doc__', None)
-        # self.__module__ = getattr(func, '__module__', None)
 
     def __get__(self, obj, cls):
         if obj is None:
@@ -39,10 +36,8 @@ class cached_property(property):
             self.value = self.func(obj)
         return self.value
 
-    def __getattribute__(self, name):
-        if name in ("__doc__", "__name__", "__module__"):
-            return getattr(self.func, name)
-        return super(cached_property, self).__getattribute__(name)
+    def __set_name__(self, owner, name):
+        self.__name__ = name
 
     def __set__(self, obj, value):
         self.value = value
