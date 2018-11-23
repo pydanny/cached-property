@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import platform
 import time
 import unittest
 from threading import Lock, Thread
@@ -151,6 +152,8 @@ class TestCachedProperty(unittest.TestCase):
             self.assert_cached(check, num_threads)
             self.assert_cached(check, num_threads)
 
+    @unittest.skipUnless(platform.python_implementation() == "CPython",
+                         "unknow garbage collection mechanism")
     def test_garbage_collection(self):
         Check = CheckFactory(self.cached_property_factory)
         check = Check()
@@ -161,7 +164,7 @@ class TestCachedProperty(unittest.TestCase):
         # remove the only reference to the Check instance
         del check
         # make sure the cache of the deleted object was removed
-        self.assertEqual(len(Check.add_cached.cache), 0)
+        self.assertEqual(Check.add_cached.cache, {})
 
     def test_object_independent(self):
         Check = CheckFactory(self.cached_property_factory)
