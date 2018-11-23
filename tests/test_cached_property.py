@@ -151,6 +151,18 @@ class TestCachedProperty(unittest.TestCase):
             self.assert_cached(check, num_threads)
             self.assert_cached(check, num_threads)
 
+    def test_garbage_collection(self):
+        Check = CheckFactory(self.cached_property_factory)
+        check = Check()
+        check.add_cached = "foo"
+
+        # check the instance is in the cache
+        self.assertIn(check, Check.add_cached.cache)
+        # remove the only reference to the Check instance
+        del check
+        # make sure the cache of the deleted object was removed
+        self.assertEqual(Check.add_cached.cache, {})
+
     def test_object_independent(self):
         Check = CheckFactory(self.cached_property_factory)
         check1 = Check()
