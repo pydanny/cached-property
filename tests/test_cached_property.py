@@ -151,6 +151,23 @@ class TestCachedProperty(unittest.TestCase):
             self.assert_cached(check, num_threads)
             self.assert_cached(check, num_threads)
 
+    def test_object_independent(self):
+        Check = CheckFactory(self.cached_property_factory)
+        check1 = Check()
+        check2 = Check()
+
+        self.assert_cached(check1, 1)
+        self.assert_cached(check1, 1)
+        self.assert_cached(check2, 1)
+        self.assert_cached(check2, 1)
+
+        del check1.add_cached
+
+        self.assert_cached(check1, 2)
+        self.assert_cached(check1, 2)
+        self.assert_cached(check2, 1)
+        self.assert_cached(check2, 1)
+
 
 class TestThreadedCachedProperty(TestCachedProperty):
     """Tests for threaded_cached_property"""

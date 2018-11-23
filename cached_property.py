@@ -7,6 +7,7 @@ __license__ = "BSD"
 
 import functools
 import threading
+import weakref
 from time import time
 
 try:
@@ -22,35 +23,43 @@ class cached_property(property):
     Source: https://github.com/bottlepy/bottle/commit/fa7733e075da0d790d809aa3d2f53071897e6f76
     """  # noqa
 
+    _sentinel = object()
+
     def __init__(self, func):
-        self.value = self._sentinel = object()
+        self.cache = weakref.WeakKeyDictionary()
         self.func = func
-        functools.wraps(func, self)
+        functools.update_wrapper(self, func)
 
     def __get__(self, obj, cls):
         if obj is None:
             return self
+
         if asyncio and asyncio.iscoroutinefunction(self.func):
             return self._wrap_in_coroutine(obj)
-        if self.value is self._sentinel:
-            self.value = self.func(obj)
-        return self.value
+
+        value = self.cache.get(obj, self._sentinel)
+        if value is self._sentinel:
+            value = self.cache[obj] = self.func(obj)
+
+        return value
 
     def __set_name__(self, owner, name):
         self.__name__ = name
 
     def __set__(self, obj, value):
-        self.value = value
+        self.cache[obj] = value
 
     def __delete__(self, obj):
-        self.value = self._sentinel
+        del self.cache[obj]
 
     def _wrap_in_coroutine(self, obj):
+
         @asyncio.coroutine
         def wrapper():
-            if self.value is self._sentinel:
-                self.value = asyncio.ensure_future(self.func(obj))
-            return self.value
+            value = self.cache.get(obj, self._sentinel)
+            if value is self._sentinel:
+                self.cache[obj] = value = asyncio.ensure_future(self.func(obj))
+            return value
 
         return wrapper()
 
@@ -105,12 +114,12 @@ class cached_property_with_ttl(cached_property):
             return self
 
         now = time()
-        if self.value is not self._sentinel:
-            value, last_updated = self.value
+        if obj in self.cache:
+            value, last_updated = self.cache[obj]
             if not self.ttl or self.ttl > now - last_updated:
                 return value
 
-        self.value = value, _ = (self.func(obj), now)
+        value, _ = self.cache[obj] = (self.func(obj), now)
         return value
 
     def __set__(self, obj, value):
