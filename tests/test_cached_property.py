@@ -27,6 +27,8 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
 
         @cached_property_decorator
         def add_cached(self):
+            """A cached adder.
+            """
             if threadsafe:
                 time.sleep(1)
                 # Need to guard this since += isn't atomic.
@@ -67,6 +69,12 @@ class TestCachedProperty(unittest.TestCase):
         """
         self.assertEqual(check.add_cached, expected)
         self.assertEqual(check.cached_total, expected)
+
+    def test_magic_attributes(self):
+        Check = CheckFactory(self.cached_property_factory)
+        self.assertEqual(Check.add_cached.__doc__.strip(), "A cached adder.")
+        self.assertEqual(Check.add_cached.__name__.strip(), "add_cached")
+        self.assertEqual(Check.add_cached.__module__, __name__)
 
     def test_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)

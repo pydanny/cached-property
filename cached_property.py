@@ -6,6 +6,7 @@ __version__ = "1.5.1"
 __license__ = "BSD"
 
 from time import time
+import functools
 import threading
 
 try:
@@ -24,6 +25,10 @@ class cached_property(property):
     def __init__(self, func):
         self.value = self._sentinel = object()
         self.func = func
+        functools.wraps(func, self)
+        # self.__name__ = getattr(func, '__name__', None)
+        # self.__doc__ = getattr(func, '__doc__', None)
+        # self.__module__ = getattr(func, '__module__', None)
 
     def __get__(self, obj, cls):
         if obj is None:
