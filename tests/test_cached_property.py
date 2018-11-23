@@ -161,7 +161,7 @@ class TestCachedProperty(unittest.TestCase):
         # remove the only reference to the Check instance
         del check
         # make sure the cache of the deleted object was removed
-        self.assertEqual(Check.add_cached.cache, {})
+        self.assertEqual(len(Check.add_cached.cache), 0)
 
     def test_object_independent(self):
         Check = CheckFactory(self.cached_property_factory)
