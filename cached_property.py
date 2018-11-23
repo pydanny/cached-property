@@ -34,6 +34,11 @@ class cached_property(property):
             self.value = self.func(obj)
         return self.value
 
+    def __getattribute__(self, name):
+        if name in ('__doc__', '__name__', '__module__'):
+            return getattr(self.func, name)
+        return super(cached_property, self).__getattribute__(name)
+
     def __set__(self, obj, value):
         self.value = value
 
@@ -63,7 +68,6 @@ class threaded_cached_property(cached_property):
     def __get__(self, obj, cls):
         if obj is None:
             return self
-
         with self.lock:
             return super(threaded_cached_property, self).__get__(obj, cls)
 
@@ -90,10 +94,10 @@ class cached_property_with_ttl(cached_property):
         else:
             func = None
         self.ttl = ttl
-        self._prepare_func(func)
+        super(cached_property_with_ttl, self).__init__(func)
 
     def __call__(self, func):
-        self._prepare_func(func)
+        super(cached_property_with_ttl, self).__init__(func)
         return self
 
     def __get__(self, obj, cls):
@@ -111,12 +115,6 @@ class cached_property_with_ttl(cached_property):
 
     def __set__(self, obj, value):
         super(cached_property_with_ttl, self).__set__(obj, (value, time()))
-
-    def _prepare_func(self, func):
-        super(cached_property_with_ttl, self).__init__(func)
-        if func:
-            self.__name__ = func.__name__
-            self.__module__ = func.__module__
 
 
 # Aliases to make cached_property_with_ttl easier to use
