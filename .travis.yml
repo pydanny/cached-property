@@ -2,6 +2,24 @@
 sudo: false
 language: python
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=b6726c411af063deb7dae6670a83c2a0be6bf453a58298f419bac4c25dba6ad9
+
+before_script: # code coverage tool
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+# command to run tests and save coverage
+script:
+  - py.test --cov cached_property
+
+after_script:
+  - coverage report -m
+  - coverage xml
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
 python:
   - "3.6"
   - "3.5"
@@ -17,6 +35,3 @@ matrix:
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -r requirements.txt
-
-# command to run tests, e.g. python setup.py test
-script: pytest tests/
