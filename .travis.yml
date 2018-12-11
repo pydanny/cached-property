@@ -18,8 +18,8 @@ script:
 after_script:
   - coverage report -m
   - coverage xml
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
+  - ./cc-test-reporter format-coverage --input-type coverage.py 
+  - ./cc-test-reporter upload-coverage
 python:
   - "3.6"
   - "3.5"
