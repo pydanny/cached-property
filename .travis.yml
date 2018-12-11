@@ -18,8 +18,8 @@ script:
 after_script:
   - coverage report -m
   - coverage xml
-  - ./cc-test-reporter format-coverage --input-type coverage.py 
-  - ./cc-test-reporter upload-coverage
+  - ./cc-test-reporter format-coverage --input-type coverage.py --debug
+  - ./cc-test-reporter upload-coverage --debug
 python:
   - "3.6"
   - "3.5"
