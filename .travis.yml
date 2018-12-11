@@ -2,14 +2,9 @@
 sudo: false
 language: python
 
-# env:
-#   global:
-#     - CC_TEST_REPORTER_ID=b6726c411af063deb7dae6670a83c2a0be6bf453a58298f419bac4c25dba6ad9
-
-addons:
-  code_climate:
-    repo_token:
-      secure: "kcODbCtC3Jk35x+mUNkrCKtobpiCKsfYUVn6np6bxnFAjYZ1NF08whvrzsRlYt4BdY78bdgaXk6aglDOHIdMhe96PMCXvJTitfmlN50QGQQnwu5FuiA9owV8EBQqqdSUQbzffeF5I8TyumsOWs6FNWylQcHkFUuLxrq9xF64NTg="
+env:
+  global:
+    - CC_TEST_REPORTER_ID=56a0691204179e8edcdde4c7ecab73b3693706aa1186ed018ca78acc663520cf
 
 before_script: # code coverage tool
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
