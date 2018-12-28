@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import platform
 import time
 import unittest
 from threading import Lock, Thread
@@ -27,6 +28,8 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
 
         @cached_property_decorator
         def add_cached(self):
+            """A cached adder.
+            """
             if threadsafe:
                 time.sleep(1)
                 # Need to guard this since += isn't atomic.
@@ -67,6 +70,12 @@ class TestCachedProperty(unittest.TestCase):
         """
         self.assertEqual(check.add_cached, expected)
         self.assertEqual(check.cached_total, expected)
+
+    def test_magic_attributes(self):
+        Check = CheckFactory(self.cached_property_factory)
+        self.assertEqual(Check.add_cached.__doc__.strip(), "A cached adder.")
+        self.assertEqual(Check.add_cached.__name__.strip(), "add_cached")
+        self.assertEqual(Check.add_cached.__module__, __name__)
 
     def test_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)
@@ -142,6 +151,37 @@ class TestCachedProperty(unittest.TestCase):
             check.run_threads(num_threads)
             self.assert_cached(check, num_threads)
             self.assert_cached(check, num_threads)
+
+    @unittest.skipUnless(platform.python_implementation() == "CPython",
+                         "unknow garbage collection mechanism")
+    def test_garbage_collection(self):
+        Check = CheckFactory(self.cached_property_factory)
+        check = Check()
+        check.add_cached = "foo"
+
+        # check the instance is in the cache
+        self.assertIn(check, Check.add_cached.cache)
+        # remove the only reference to the Check instance
+        del check
+        # make sure the cache of the deleted object was removed
+        self.assertEqual(Check.add_cached.cache, {})
+
+    def test_object_independent(self):
+        Check = CheckFactory(self.cached_property_factory)
+        check1 = Check()
+        check2 = Check()
+
+        self.assert_cached(check1, 1)
+        self.assert_cached(check1, 1)
+        self.assert_cached(check2, 1)
+        self.assert_cached(check2, 1)
+
+        del check1.add_cached
+
+        self.assert_cached(check1, 2)
+        self.assert_cached(check1, 2)
+        self.assert_cached(check2, 1)
+        self.assert_cached(check2, 1)
 
 
 class TestThreadedCachedProperty(TestCachedProperty):
