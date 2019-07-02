@@ -84,6 +84,31 @@ Now when we run it the price stays at $550.
 
 Why doesn't the value of ``monopoly.boardwalk`` change? Because it's a **cached property**!
 
+Decorating Mangled Properties
+-----------------------------
+
+When decorating properties that have their name mangled,
+``cached_property`` will attempt to figure out the mangled name.
+If you don't want this to happen, or ``cached_property`` guesses the wrong name
+then you can specify the name yourself.
+
+.. code-block:: python
+
+    from cached_property import cached_property
+
+    class Monopoly(object):
+
+        def __init__(self):
+            self.boardwalk_price = 500
+
+        @cached_property(name="_Monopoly__private_boardwalk")
+        def __private_boardwalk(self):
+            # Again, this is a silly example. Don't worry about it, this is
+            #   just an example for clarity.
+            self.boardwalk_price += 50
+            return self.boardwalk_price
+
+
 Invalidating the Cache
 ----------------------
 
