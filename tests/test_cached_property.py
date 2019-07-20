@@ -6,7 +6,7 @@ import unittest
 from threading import Lock, Thread
 from freezegun import freeze_time
 
-import cached_property
+import property_cached as _property
 
 
 def CheckFactory(cached_property_decorator, threadsafe=False):

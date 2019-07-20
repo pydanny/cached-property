@@ -4,7 +4,7 @@ import time
 import unittest
 from threading import Lock, Thread
 from freezegun import freeze_time
-import cached_property
+import property_cached as cached_property
 
 
 def unittest_run_loop(f):

@@ -30,18 +30,18 @@ if sys.argv[-1] == "publish":
     sys.exit()
 
 setup(
-    name="cached-property",
+    name="property-cached",
     version=__version__,
-    description="A decorator for caching properties in classes.",
+    description="A decorator for caching properties in classes (forked from cached-property).",
     long_description=readme + "\n\n" + history,
-    author="Daniel Greenfeld",
-    author_email="pydanny@gmail.com",
-    url="https://github.com/pydanny/cached-property",
+    author="Martin Larralde",
+    author_email="martin.larralde@ens-paris-saclay.fr",
+    url="https://github.com/althonos/property-cached",
     py_modules=["cached_property"],
     include_package_data=True,
     license="BSD",
     zip_safe=False,
-    keywords="cached-property",
+    keywords=["cached-property"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
