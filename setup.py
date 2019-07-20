@@ -18,22 +18,14 @@ def read(fname):
         os.path.join(os.path.dirname(__file__), fname), "r", "utf-8"
     ).read()
 
-
 readme = read("README.rst")
 history = read("HISTORY.rst").replace(".. :changelog:", "")
-
-if sys.argv[-1] == "publish":
-    os.system("python setup.py sdist bdist_wheel")
-    os.system("twine upload dist/*")
-    os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
-    os.system("git push --tags")
-    sys.exit()
 
 setup(
     name="property-cached",
     version=__version__,
     description="A decorator for caching properties in classes (forked from cached-property).",
-    long_description=readme + "\n\n" + history,
+    long_description="\n\n".join([readme, history]),
     author="Martin Larralde",
     author_email="martin.larralde@ens-paris-saclay.fr",
     url="https://github.com/althonos/property-cached",

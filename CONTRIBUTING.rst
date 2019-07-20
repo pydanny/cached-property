@@ -3,7 +3,7 @@ Contributing
 ============
 
 Contributions are welcome, and they are greatly appreciated! Every
-little bit helps, and credit will always be given. 
+little bit helps, and credit will always be given.
 
 You can contribute in many ways:
 
@@ -13,7 +13,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/pydanny/cached-property/issues.
+Report bugs at https://github.com/althonos/property-cached/issues.
 
 If you are reporting a bug, please include:
 
@@ -36,14 +36,14 @@ is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-cached-property could always use more documentation, whether as part of the 
+property-cached could always use more documentation, whether as part of the
 official cached-property docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://github.com/pydanny/cached-property/issues.
+The best way to send feedback is to file an issue at https://github.com/althonos/property-cached/issues.
 
 If you are proposing a feature:
 
@@ -55,37 +55,37 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `cached-property` for local development.
+Ready to contribute? Here's how to set up ``property-cached`` for local development.
 
-1. Fork the `cached-property` repo on GitHub.
+1. Fork the ``property-cached`` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/cached-property.git
+    $ git clone git@github.com:your_name_here/property-cached.git
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 
-    $ mkvirtualenv cached-property
-    $ cd cached-property/
+    $ mkvirtualenv property-cached
+    $ cd property-cached/
     $ python setup.py develop
 
 4. Create a branch for local development::
 
     $ git checkout -b name-of-your-bugfix-or-feature
-   
+
    Now you can make your changes locally.
 
-   
+
 5. Clean up the formatting (must be running at least Python 3.6)::
-  
+
     $ pip install -U black
     $ black .
-   
+
 6. When you're done making changes, check that your changes pass the tests, including testing other Python versions with tox::
 
     $ pytest tests/
     $ tox
 
-   To get tox, just pip install it into your virtualenv. 
+   To get tox, just pip install it into your virtualenv.
 
 7. Commit your changes and push your branch to GitHub::
 
@@ -104,8 +104,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 2.7, and 3.3, 3.4, 3.5, 3.6 and for PyPy. Check 
-   https://travis-ci.org/pydanny/cached-property/pull_requests
+3. The pull request should work for Python 2.7, and 3.3, 3.4, 3.5, 3.6 and for PyPy. Check
+   https://travis-ci.org/althonos/property-cached/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
 Tips
@@ -114,4 +114,3 @@ Tips
 To run a subset of tests::
 
 	$ python -m unittest tests.test_cached-property
-

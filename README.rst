@@ -1,19 +1,27 @@
 ===============================
-cached-property
+property-cached
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/cached-property.svg
-    :target: https://pypi.python.org/pypi/cached-property
+.. image:: https://img.shields.io/pypi/v/property-cached.svg&style=flat-square
+    :target: https://pypi.python.org/pypi/property-cached
 
-.. image:: https://img.shields.io/travis/pydanny/cached-property/master.svg
-    :target: https://travis-ci.org/pydanny/cached-property
-        
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+.. image:: https://img.shields.io/travis/althonos/property-cached/master.svg&style=flat-square
+    :target: https://travis-ci.org/althonos/property-cached
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg&style=flat-square
     :target: https://github.com/ambv/black
-    :alt: Code style: black        
+    :alt: Code style: black
 
 
-A decorator for caching properties in classes.
+A decorator for caching properties in classes (forked from ``cached-property``).
+
+This library was forked from the upstream library ``cached-property`` since its
+developer does not seem to be maintaining it anymore. It works as a drop-in
+replacement with fully compatible API (import ``property_cached`` instead of
+``cached_property`` in your code and *voilà*). In case development resumes on
+the original library, this one is likely to be deprecated.
+
+*Original ``README`` included below:*
 
 Why?
 -----
@@ -232,22 +240,12 @@ is why they are broken out into seperate tools. See https://github.com/pydanny/c
 Credits
 --------
 
+* ``@pydanny`` for the original ``cached-property`` implementation.
 * Pip, Django, Werkzueg, Bottle, Pyramid, and Zope for having their own implementations. This package originally used an implementation that matched the Bottle version.
 * Reinout Van Rees for pointing out the `cached_property` decorator to me.
-* My awesome wife `@audreyr`_ who created `cookiecutter`_, which meant rolling this out took me just 15 minutes.
-* @tinche for pointing out the threading issue and providing a solution.
-* @bcho for providing the time-to-expire feature
+* ``@audreyr``_ who created ``cookiecutter``_, which meant rolling this out took ``@pydanny`` just 15 minutes.
+* ``@tinche`` for pointing out the threading issue and providing a solution.
+* ``@bcho`` for providing the time-to-expire feature
 
 .. _`@audreyr`: https://github.com/audreyr
 .. _`cookiecutter`: https://github.com/audreyr/cookiecutter
-
-Support This Project
----------------------------
-
-This project is maintained by volunteers. Support their efforts by spreading the word about:
-
-.. image:: https://cdn.shopify.com/s/files/1/0304/6901/t/2/assets/logo.png?8399580890922549623
-   :name: Two Scoops Press
-   :align: center
-   :alt: Two Scoops Press
-   :target: https://www.twoscoopspress.com
