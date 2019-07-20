@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-__author__ = "Daniel Greenfeld"
-__email__ = "pydanny@gmail.com"
-__version__ = "1.5.1"
+__author__ = "Martin Larralde"
+__email__ = "martin.larralde@ens-paris-saclay.fr"
 __license__ = "BSD"
+__version__ = "1.5.1"
 
 import functools
 import sys
@@ -65,7 +65,7 @@ class cached_property(property):
         del self.cache[obj]
 
     def _wrap_in_coroutine(self, obj):
-        
+
         @asyncio.coroutine
         def wrapper():
             value = self.cache.get(obj, self._sentinel)

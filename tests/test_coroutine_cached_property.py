@@ -9,7 +9,7 @@ import unittest
 import asyncio
 from freezegun import freeze_time
 
-import property_cached as  cached_property
+import property_cached as cached_property
 
 
 def unittest_run_loop(f):
