@@ -3,6 +3,11 @@
 History
 -------
 
+Unreleased
+++++++++++
+
+* Fix metadata to keep original author and add @althonos as maintainer.
+
 1.6.1 (2019-07-22)
 ++++++++++++++++++
 
