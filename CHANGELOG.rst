@@ -3,6 +3,15 @@
 History
 -------
 
+1.6.0 (2019-07-22)
+++++++++++++++++++
+
+* Fixed class hierarchy, ``cached_property`` now inherits from ``property``
+* Add support for slotted classes and stop using the object ``__dict__``.
+* Improve function wrapping using ``functools.update_wrapper``.
+* Implement the ``__set_name__`` magic method available since Python 3.6.
+
+
 1.5.1 (2018-08-05)
 ++++++++++++++++++
 

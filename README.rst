@@ -2,11 +2,14 @@
 property-cached
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/property-cached.svg?style=flat-square
-   :target: https://pypi.python.org/pypi/property-cached
-
 .. image:: https://img.shields.io/travis/althonos/property-cached/master.svg?style=flat-square
    :target: https://travis-ci.org/althonos/property-cached
+
+.. image:: https://img.shields.io/codecov/c/gh/althonos/property-cached.svg?style=flat-square
+   :target: https://codecov.io/gh/althonos/property-cached
+
+.. image:: https://img.shields.io/pypi/v/property-cached.svg?style=flat-square
+   :target: https://pypi.python.org/pypi/property-cached
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
    :target: https://github.com/ambv/black
