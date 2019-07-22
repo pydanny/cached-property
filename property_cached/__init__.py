@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
-__author__ = "Martin Larralde"
-__email__ = "martin.larralde@ens-paris-saclay.fr"
-__license__ = "BSD"
-__version__ = "1.5.1"
-
 import functools
+import pkg_resources
 import sys
 import threading
 import weakref
@@ -15,6 +11,12 @@ try:
     import asyncio
 except (ImportError, SyntaxError):
     asyncio = None
+
+
+__author__ = "Martin Larralde"
+__email__ = "martin.larralde@ens-paris-saclay.fr"
+__license__ = "BSD"
+__version__ = pkg_resources.resource_string(__name__, "_version.txt").decode('utf-8').strip()
 
 
 class cached_property(property):

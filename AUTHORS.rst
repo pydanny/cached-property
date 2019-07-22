@@ -8,6 +8,11 @@ Development Lead
 * Daniel Roy Greenfeld (@pydanny)
 * Audrey Roy Greenfeld (@audreyr)
 
+Maintainer
+----------
+
+* Martin Larralde (@althonos)
+
 Contributors
 ------------
 

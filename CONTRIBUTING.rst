@@ -37,7 +37,7 @@ Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
 property-cached could always use more documentation, whether as part of the
-official cached-property docs, in docstrings, or even on the web in blog posts,
+official property-cached docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback

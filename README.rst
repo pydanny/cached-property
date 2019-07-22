@@ -2,15 +2,14 @@
 property-cached
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/property-cached.svg&style=flat-square
-    :target: https://pypi.python.org/pypi/property-cached
+.. image:: https://img.shields.io/pypi/v/property-cached.svg?style=flat-square
+   :target: https://pypi.python.org/pypi/property-cached
 
-.. image:: https://img.shields.io/travis/althonos/property-cached/master.svg&style=flat-square
-    :target: https://travis-ci.org/althonos/property-cached
+.. image:: https://img.shields.io/travis/althonos/property-cached/master.svg?style=flat-square
+   :target: https://travis-ci.org/althonos/property-cached
 
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg&style=flat-square
-    :target: https://github.com/ambv/black
-    :alt: Code style: black
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square
+   :target: https://github.com/ambv/black
 
 
 A decorator for caching properties in classes (forked from ``cached-property``).
@@ -21,7 +20,7 @@ replacement with fully compatible API (import ``property_cached`` instead of
 ``cached_property`` in your code and *voilà*). In case development resumes on
 the original library, this one is likely to be deprecated.
 
-*Original ``README`` included below:*
+*Original readme included below:*
 
 Why?
 -----

@@ -1,23 +1,29 @@
 # Config file for automatic testing at travis-ci.org
 sudo: false
+dist: xenial
 language: python
 
-env:
-  global:
-    - CC_TEST_REPORTER_ID=56a0691204179e8edcdde4c7ecab73b3693706aa1186ed018ca78acc663520cf
+python:
+  - 2.7
+  - 3.4
+  - 3.5
+  - 3.6
+  - 3.7
 
 before_script: # code coverage tool
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - pip install -r tests/requirements.txt
+
+install: 
+  - pip install .
 
 # command to run tests and save coverage
 script:
-  - py.test --cov cached_property
+  - python -m coverage run -m unittest discover -v
 
 after_script:
-  - coverage report -m
-  - coverage xml
+  - python -m coverage report -m
+  - python -m coverage xml
+
   - ./cc-test-reporter format-coverage --input-type coverage.py --debug
   - ./cc-test-reporter upload-coverage --debug
 python:
@@ -27,11 +33,3 @@ python:
   - "2.7"
   - "pypy"
 
-matrix:
-  include:
-    - python: 3.7
-      dist: xenial
-      sudo: true
-
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -r requirements.txt
