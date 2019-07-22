@@ -34,6 +34,19 @@ after_success:
   - python -m coverage xml
   - bash <(curl -s https://codecov.io/bash)
 
+before_deploy:
+  - python setup.py sdist bdist_wheel
+  - twine check dist/*
+
+deploy:
+  provider: script
+  on:
+    python: 3.7
+    tags: true
+    repo: althonos/property-cached
+  skip_cleanup: true
+  script: twine upload --skip-existing dist/*
+
 notifications:
   email:
   - althonosdev@gmail.com
