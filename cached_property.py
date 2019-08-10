@@ -5,6 +5,7 @@ __email__ = "pydanny@gmail.com"
 __version__ = "1.5.1"
 __license__ = "BSD"
 
+from functools import wraps
 from time import time
 import threading
 
@@ -36,6 +37,7 @@ class cached_property(object):
         return value
 
     def _wrap_in_coroutine(self, obj):
+        @wraps(obj)
         @asyncio.coroutine
         def wrapper():
             future = asyncio.ensure_future(self.func(obj))
