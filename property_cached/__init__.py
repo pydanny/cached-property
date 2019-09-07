@@ -68,6 +68,7 @@ class cached_property(property):
 
     def _wrap_in_coroutine(self, obj):
 
+        @functools.wraps(obj)
         @asyncio.coroutine
         def wrapper():
             value = self.cache.get(obj, self._sentinel)
