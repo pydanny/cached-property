@@ -3,6 +3,10 @@
 History
 -------
 
+1.6.3 (2019-09-07)
+++++++++++++++++++
+
+* Resolve `cached_property` docstring not showing (`#171 <https://github.com/pydanny/cached-property/pull/171>`_).
 
 1.6.2 (2019-07-22)
 ++++++++++++++++++
