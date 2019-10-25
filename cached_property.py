@@ -15,7 +15,7 @@ except (ImportError, SyntaxError):
     asyncio = None
 
 
-class cached_property(object):
+class cached_property(property):
     """
     A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Deleting the attribute resets the property.
@@ -47,7 +47,7 @@ class cached_property(object):
         return wrapper()
 
 
-class threaded_cached_property(object):
+class threaded_cached_property(property):
     """
     A cached_property version for use in environments where multiple threads
     might concurrently try to access the property.
@@ -74,7 +74,7 @@ class threaded_cached_property(object):
                 return obj_dict.setdefault(name, self.func(obj))
 
 
-class cached_property_with_ttl(object):
+class cached_property_with_ttl(property):
     """
     A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Setting the ttl to a number expresses how long
