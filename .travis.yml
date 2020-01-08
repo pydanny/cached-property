@@ -8,11 +8,7 @@ git:
 
 matrix:
   include:
-  - python: pypy
-    env: TESTS=tests.test_cached_property
-  - python: 2.7
-    env: TESTS=tests.test_cached_property
-  - python: 3.4
+  - python: pypy3.5
     env: TESTS=tests.test_cached_property
   - python: 3.5
     env: TESTS=tests.test_cached_property
