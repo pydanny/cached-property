@@ -246,8 +246,13 @@ Support This Project
 
 This project is maintained by volunteers. Support their efforts by spreading the word about:
 
-.. image:: https://cdn.shopify.com/s/files/1/0304/6901/t/2/assets/logo.png?8399580890922549623
-   :name: Two Scoops Press
+Django Crash Course
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: https://cdn.shopify.com/s/files/1/0304/6901/files/Django-Crash-Course-300x436.jpg
+   :name: Django Crash Course: Covers Django 3.0 and Python 3.8
    :align: center
-   :alt: Two Scoops Press
-   :target: https://www.twoscoopspress.com
+   :alt: Django Crash Course
+   :target: https://www.roygreenfeld.com/products/django-crash-course
+
+Django Crash Course for Django 3.0 and Python 3.8 is the best cheese-themed Django reference in the universe!
