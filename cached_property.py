@@ -160,6 +160,73 @@ threaded_cached_property_ttl = threaded_cached_property_with_ttl
 timed_threaded_cached_property = threaded_cached_property_with_ttl
 
 
+def is_cached(o, name):
+    """Whether a cached property is already computed.
+
+    Parameters
+    ----------
+    o : object
+        The object the property belongs to.
+    name : str
+        Name of the property.
+
+    Returns
+    -------
+    bool
+        True iff the property is already computed.
+
+    Examples
+    --------
+    >>> class MyClass(object):
+    ...     @cached_property
+    ...     def my_cached_property(self):
+    ...         print('Computing my_cached_property...')
+    ...         return 42
+    ...     @cached_property
+    ...     def my_second_cached_property(self):
+    ...         print('Computing my_second_cached_property...')
+    ...         return 51
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    42
+    >>> is_cached(my_object, 'my_cached_property')
+    True
+    >>> is_cached(my_object, 'my_second_cached_property')
+    False
+    """
+    return name in o.__dict__
+
+
+def un_cache(o, name):
+    """Empty the cache of a cached property.
+
+    Parameters
+    ----------
+    o : object
+        The object the property belongs to.
+    name : str
+        Name of the property.
+
+    Examples
+    --------
+    >>> class MyClass(object):
+    ...     @cached_property
+    ...     def my_cached_property(self):
+    ...         print('Computing my_cached_property...')
+    ...         return 42
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    42
+    >>> un_cache(my_object, 'my_cached_property')
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    42
+    """
+    del o.__dict__[name]
+
+
 def all_members(cls):
     """All members of a class.
 
@@ -239,46 +306,13 @@ def cached_properties(o):
     my_second_cached_property
     """
     return (
-        k for k, v in all_members(o.__class__).items() if isinstance(v, CachedProperty)
+        k for k, v in all_members(o.__class__).items()
+        if isinstance(v, CachedProperty)
     )
 
 
-def cached_properties_computed(o):
-    """Cached properties that are already computed.
-
-    Parameters
-    ----------
-    o : object
-
-    Yields
-    ------
-    str
-        Name of each cached property that is already computed.
-
-    Examples
-    --------
-    >>> class MyClass(object):
-    ...     @cached_property
-    ...     def my_cached_property(self):
-    ...         print('Computing my_cached_property...')
-    ...         return 2
-    ...     @cached_property
-    ...     def my_second_cached_property(self):
-    ...         print('Computing my_second_cached_property...')
-    ...         return 3
-    >>> my_object = MyClass()
-    >>> my_object.my_cached_property
-    Computing my_cached_property...
-    2
-    >>> for name in cached_properties_computed(my_object):
-    ...     print(name)
-    my_cached_property
-    """
-    return (k for k in cached_properties(o) if k in o.__dict__.keys())
-
-
 def delete_cache(o):
-    """Delete the cache.
+    """Empty the cache of a whole object.
 
     Parameters
     ----------
@@ -306,7 +340,7 @@ def delete_cache(o):
     """
     for cached_property_name in cached_properties(o):
         try:
-            del o.__dict__[cached_property_name]
+            un_cache(o, cached_property_name)
         except KeyError:
             pass
 
