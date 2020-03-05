@@ -15,7 +15,13 @@ except (ImportError, SyntaxError):
     asyncio = None
 
 
-class cached_property(object):
+class CachedProperty(object):
+    """Parent class for cached properties."""
+    # As of now, it is only used for ``isinstance`` tests. Cf. ``cached_properties_names``.
+    pass
+
+
+class cached_property(CachedProperty):
     """
     A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Deleting the attribute resets the property.
@@ -47,7 +53,7 @@ class cached_property(object):
         return wrapper()
 
 
-class threaded_cached_property(object):
+class threaded_cached_property(CachedProperty):
     """
     A cached_property version for use in environments where multiple threads
     might concurrently try to access the property.
@@ -74,7 +80,7 @@ class threaded_cached_property(object):
                 return obj_dict.setdefault(name, self.func(obj))
 
 
-class cached_property_with_ttl(object):
+class cached_property_with_ttl(CachedProperty):
     """
     A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Setting the ttl to a number expresses how long
@@ -151,3 +157,208 @@ class threaded_cached_property_with_ttl(cached_property_with_ttl):
 # Alias to make threaded_cached_property_with_ttl easier to use
 threaded_cached_property_ttl = threaded_cached_property_with_ttl
 timed_threaded_cached_property = threaded_cached_property_with_ttl
+
+
+def all_members(cls):
+    """All members of a class.
+
+    Credit: Jürgen Hermann, Alex Martelli. From
+    https://www.oreilly.com/library/view/python-cookbook/0596001673/ch05s03.html.
+
+
+    Parameters
+    ----------
+    cls : class
+
+    Returns
+    -------
+    dict
+        Similar to ``cls.__dict__``, but include also the inherited members.
+
+    Examples
+    --------
+    >>> class Parent(object):
+    ...     attribute_parent = 42
+    >>> class Child(Parent):
+    ...     attribute_child = 51
+    >>> 'attribute_child' in all_members(Child).keys()
+    True
+    >>> 'attribute_parent' in all_members(Child).keys()
+    True
+    """
+    try:
+        # Try getting all relevant classes in method-resolution order
+        mro = list(cls.__mro__)
+    except AttributeError:
+        # If a class has no _ _mro_ _, then it's a classic class
+        def getmro(a_class, recurse):
+            an_mro = [a_class]
+            for base in a_class.__bases__:
+                an_mro.extend(recurse(base, recurse))
+            return an_mro
+        mro = getmro(cls, getmro)
+    mro.reverse()
+    members = {}
+    for someClass in mro:
+        members.update(vars(someClass))
+    return members
+
+
+def cached_properties(o):
+    """Cached properties (whether already computed or not).
+
+    Parameters
+    ----------
+    o : object
+
+    Yields
+    ------
+    str
+        Name of each cached property.
+
+    Examples
+    --------
+    >>> class MyClass(object):
+    ...     @cached_property
+    ...     def my_cached_property(self):
+    ...         print('Computing my_cached_property...')
+    ...         return 2
+    ...     @cached_property
+    ...     def my_second_cached_property(self):
+    ...         print('Computing my_second_cached_property...')
+    ...         return 3
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    2
+    >>> for name in cached_properties(my_object):
+    ...     print(name)
+    my_cached_property
+    my_second_cached_property
+    """
+    return (k for k, v in all_members(o.__class__).items()
+            if isinstance(v, CachedProperty))
+
+
+def cached_properties_computed(o):
+    """Cached properties that are already computed.
+
+    Parameters
+    ----------
+    o : object
+
+    Yields
+    ------
+    str
+        Name of each cached property that is already computed.
+
+    Examples
+    --------
+    >>> class MyClass(object):
+    ...     @cached_property
+    ...     def my_cached_property(self):
+    ...         print('Computing my_cached_property...')
+    ...         return 2
+    ...     @cached_property
+    ...     def my_second_cached_property(self):
+    ...         print('Computing my_second_cached_property...')
+    ...         return 3
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    2
+    >>> for name in cached_properties_computed(my_object):
+    ...     print(name)
+    my_cached_property
+    """
+    return (k for k in cached_properties(o) if k in o.__dict__.keys())
+
+
+def delete_cache(o):
+    """Delete the cache.
+
+    Parameters
+    ----------
+    o : object
+
+    Examples
+    --------
+    >>> class MyClass(object):
+    ...     @cached_property
+    ...     def my_cached_property(self):
+    ...         print('Computing my_cached_property...')
+    ...         return 2
+    ...     @cached_property
+    ...     def my_second_cached_property(self):
+    ...         print('Computing my_second_cached_property...')
+    ...         return 3
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    2
+    >>> delete_cache(my_object)
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    2
+    """
+    for cached_property_name in cached_properties(o):
+        try:
+            del o.__dict__[cached_property_name]
+        except KeyError:
+            pass
+
+
+class property_deleting_cache:
+    """Define a property that deletes the cache when set or deleted.
+
+    Parameters
+    ----------
+    func : function
+        The code of the function is not used, only its docstring.
+
+    Returns
+    -------
+    property
+        A property with get, set and delete. When it is set or deleted,
+        it deletes the cache of the object it belongs to.
+
+    Examples
+    --------
+    >>> class MyClass(object):
+    ...     def __init__(self, my_parameter):
+    ...         self.my_parameter = my_parameter
+    ...     @property_deleting_cache
+    ...     def my_parameter(self):
+    ...         "A parameter that deletes the cache when set or deleted."
+    ...         pass
+    ...     @cached_property
+    ...     def my_cached_property(self):
+    ...         print('Computing my_cached_property...')
+    ...         return self.my_parameter + 1
+    >>> my_object = MyClass(my_parameter=41)
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    42
+    >>> my_object.my_parameter = 50
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    51
+    >>> MyClass.my_parameter.__doc__
+    'A parameter that deletes the cache when set or deleted.'
+    """
+    def __init__(self, func):
+        self.__doc__ = getattr(func, "__doc__")
+        self.func = func
+
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        return self.value
+
+    def __set__(self, obj, value):
+        delete_cache(obj)
+        self.value = value
+
+    def __delete__(self, obj):
+        delete_cache(obj)
+        del self.value
