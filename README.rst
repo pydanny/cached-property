@@ -25,129 +25,229 @@ Why?
 How to use it
 --------------
 
-Let's define a class with an expensive property. Every time you stay there the
-price goes up by $50!
+Let's define a class with an expensive property. Imagine that the "print"
+instruction in this example represents a long computation:
 
 .. code-block:: python
 
-    class Monopoly(object):
-
-        def __init__(self):
-            self.boardwalk_price = 500
+    class MyClass(object):
 
         @property
-        def boardwalk(self):
+        def my_property(self):
             # In reality, this might represent a database call or time
             # intensive task like calling a third-party API.
-            self.boardwalk_price += 50
-            return self.boardwalk_price
+            print('Computing my_property...')
+            return 42
 
 Now run it:
 
 .. code-block:: python
 
-    >>> monopoly = Monopoly()
-    >>> monopoly.boardwalk
-    550
-    >>> monopoly.boardwalk
-    600
+    >>> my_object = MyClass()
+    >>> my_object.my_property
+    Computing my_property...
+    42
+    >>> my_object.my_property
+    Computing my_property...
+    42
 
-Let's convert the boardwalk property into a ``cached_property``.
+Let's convert this property into a ``cached_property``:
 
 .. code-block:: python
 
     from cached_property import cached_property
 
-    class Monopoly(object):
-
-        def __init__(self):
-            self.boardwalk_price = 500
+    class MyClass(object):
 
         @cached_property
-        def boardwalk(self):
-            # Again, this is a silly example. Don't worry about it, this is
-            #   just an example for clarity.
-            self.boardwalk_price += 50
-            return self.boardwalk_price
+        def my_cached_property(self):
+            print('Computing my_cached_property...')
+            return 42
 
-Now when we run it the price stays at $550.
+Now when we run it the computation is performed only once:
 
 .. code-block:: python
 
-    >>> monopoly = Monopoly()
-    >>> monopoly.boardwalk
-    550
-    >>> monopoly.boardwalk
-    550
-    >>> monopoly.boardwalk
-    550
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_property...
+    42
+    >>> my_object.my_cached_property
+    42
+    >>> my_object.my_cached_property
+    42
 
-Why doesn't the value of ``monopoly.boardwalk`` change? Because it's a **cached property**!
+Why doesn't the value of ``my_object.my_cached_property`` change? Because it's
+a **cached property**!
+
+Inspecting the cache
+--------------------
+
+Sometimes you may want to list all the cached properties of an object. In
+order to demonstrate this, let us define a class with several cached
+properties:
+
+.. code-block:: python
+
+    from cached_property import cached_property
+
+    class MyClass(object):
+
+        @cached_property
+        def my_cached_property(self):
+            print('Computing my_cached_property...')
+            return 42
+
+        @cached_property
+        def my_second_cached_property(self):
+            print('Computing my_second_cached_property...')
+            return 51
+
+To list all the cached properties of an object, use the function
+``cached_properties``:
+
+.. code-block:: python
+
+    >>> from cached_property import cached_properties
+    >>> my_object = MyClass()
+    >>> for property_name in cached_properties(my_object):
+    ...     print(property_name)
+    my_cached_property
+    my_second_cached_property
+
+To test which properties are already cached, use ``is_cached``:
+
+.. code-block:: python
+
+    >>> from cached_property import is_cached
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_property...
+    42
+    >>> is_cached(my_object, 'my_cached_property')
+    True
+    >>> is_cached(my_object, 'my_second_cached_property')
+    False
 
 Invalidating the Cache
 ----------------------
 
-Results of cached functions can be invalidated by outside forces. Let's demonstrate how to force the cache to invalidate:
+Results of cached functions can be invalidated by outside forces. To
+demonstrate this, let's define first an object as we already did:
+
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    42
+    >>> my_object.my_second_cached_property
+    Computing my_second_cached_property...
+    51
+
+To delete the cache for one property in particular, use ``un_cache``:
 
 .. code-block:: python
 
-    >>> monopoly = Monopoly()
-    >>> monopoly.boardwalk
-    550
-    >>> monopoly.boardwalk
-    550
-    >>> # invalidate the cache
-    >>> del monopoly.__dict__['boardwalk']
-    >>> # request the boardwalk property again
-    >>> monopoly.boardwalk
-    600
-    >>> monopoly.boardwalk
-    600
+    >>> from cached_property import un_cache
+    >>> un_cache(my_object, 'my_cached_property')
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    42
+    >>> my_object.my_second_cached_property
+    51
+
+To delete the cache of the whole object, use ``delete_cache``:
+
+.. code-block:: python
+
+    >>> from cached_property import delete_cache
+    >>> delete_cache(my_object)
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    42
+    >>> my_object.my_second_cached_property
+    Computing my_second_cached_property...
+    51
+
+Property deleting the cache
+---------------------------
+
+Sometimes, you want to define a property that automatically deletes the cache
+of the object when the property is set or deleted. You can use
+``property_deleting_cache``:
+
+.. code-block:: python
+
+    from cached_property import cached_property, property_deleting_cache
+
+    class MyClass(object):
+
+        def __init__(self, my_parameter):
+            self.my_parameter = my_parameter
+
+        @property_deleting_cache
+        def my_parameter(self):
+            print('Accessing my_parameter...')
+
+        @cached_property
+        def my_cached_property(self):
+            print('Computing my_cached_property...')
+            return self.my_parameter + 1
+
+Then use it:
+
+.. code-block:: python
+
+    >>> my_object = MyClass(my_parameter=41)
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    Accessing my_parameter...
+    42
+    >>> my_object.my_cached_property
+    42
+    >>> my_object.my_parameter = 50
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    Accessing my_parameter...
+    51
+    >>> my_object.my_cached_property
+    51
 
 Working with Threads
 ---------------------
 
-What if a whole bunch of people want to stay at Boardwalk all at once? This means using threads, which
-unfortunately causes problems with the standard ``cached_property``. In this case, switch to using the
+What if a whole bunch of people want to access ``my_cached_property``
+all at once? This means using threads, which unfortunately causes problems
+with the standard ``cached_property``. In this case, switch to using the
 ``threaded_cached_property``:
 
 .. code-block:: python
 
     from cached_property import threaded_cached_property
 
-    class Monopoly(object):
-
-        def __init__(self):
-            self.boardwalk_price = 500
+    class MyClass(object):
 
         @threaded_cached_property
-        def boardwalk(self):
-            """threaded_cached_property is really nice for when no one waits
-                for other people to finish their turn and rudely start rolling
-                dice and moving their pieces."""
-
-            sleep(1)
-            self.boardwalk_price += 50
-            return self.boardwalk_price
+        def my_cached_property(self):
+            print('Computing my_cached_property...')
+            return 42
 
 Now use it:
 
 .. code-block:: python
 
     >>> from threading import Thread
-    >>> from monopoly import Monopoly
-    >>> monopoly = Monopoly()
+    >>> my_object = MyClass()
     >>> threads = []
     >>> for x in range(10):
-    >>>     thread = Thread(target=lambda: monopoly.boardwalk)
-    >>>     thread.start()
-    >>>     threads.append(thread)
+    ...     thread = Thread(target=lambda: my_object.my_cached_property)
+    ...     thread.start()
+    ...     threads.append(thread)
 
     >>> for thread in threads:
-    >>>     thread.join()
+    ...     thread.join()
+    Computing my_cached_property...
 
-    >>> self.assertEqual(m.boardwalk, 550)
-
+Please note that ``my_cached_property`` was computed only once, as usual.
 
 Working with async/await (Python 3.5+)
 --------------------------------------
@@ -160,37 +260,34 @@ computed once and then cached:
 
     from cached_property import cached_property
 
-    class Monopoly(object):
-
-        def __init__(self):
-            self.boardwalk_price = 500
+    class MyClass(object):
 
         @cached_property
-        async def boardwalk(self):
-            self.boardwalk_price += 50
-            return self.boardwalk_price
+        async def my_cached_property(self):
+            print('Computing my_cached_property...')
+            return 42
 
 Now use it:
 
 .. code-block:: python
 
-    >>> async def print_boardwalk():
-    ...     monopoly = Monopoly()
-    ...     print(await monopoly.boardwalk)
-    ...     print(await monopoly.boardwalk)
-    ...     print(await monopoly.boardwalk)
+    >>> async def print_my_cached_property():
+    ...     my_object = MyClass()
+    ...     print(await my_object.my_cached_property)
+    ...     print(await my_object.my_cached_property)
+    ...     print(await my_object.my_cached_property)
     >>> import asyncio
-    >>> asyncio.get_event_loop().run_until_complete(print_boardwalk())
-    550
-    550
-    550
+    >>> asyncio.get_event_loop().run_until_complete(print_my_cached_property())
+    Computing my_cached_property...
+    42
+    42
+    42
 
 Note that this does not work with threading either, most asyncio
 objects are not thread-safe. And if you run separate event loops in
 each thread, the cached version will most likely have the wrong event
 loop. To summarize, either use cooperative multitasking (event loop)
 or threading, but not both at the same time.
-
 
 Timing out the cache
 --------------------
@@ -203,31 +300,30 @@ versions of ``cached_property`` and ``threaded_cached_property``.
     import random
     from cached_property import cached_property_with_ttl
 
-    class Monopoly(object):
+    class MyClass(object):
 
-        @cached_property_with_ttl(ttl=5) # cache invalidates after 5 seconds
-        def dice(self):
-            # I dare the reader to implement a game using this method of 'rolling dice'.
-            return random.randint(2,12)
+        @cached_property_with_ttl(ttl=2) # cache invalidates after 2 seconds
+        def my_cached_property(self):
+            print('Computing my_cached_property...')
+            return random.randint(1, 100)
 
 Now use it:
 
 .. code-block:: python
 
-    >>> monopoly = Monopoly()
-    >>> monopoly.dice
-    10
-    >>> monopoly.dice
-    10
+    >>> my_object = MyClass()
+    >>> my_object.my_cached_property
+    42
+    >>> my_object.my_cached_property
+    42
     >>> from time import sleep
-    >>> sleep(6) # Sleeps long enough to expire the cache
-    >>> monopoly.dice
-    3
-    >>> monopoly.dice
-    3
+    >>> sleep(3)  # Sleeps long enough to expire the cache
+    >>> my_object.my_cached_property
+    51
 
-**Note:** The ``ttl`` tools do not reliably allow the clearing of the cache. This
-is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
+**Note:** The ``ttl`` tools do not reliably allow the clearing of the cache.
+This is why they are broken out into separate tools. See
+https://github.com/pydanny/cached-property/issues/16.
 
 Credits
 --------
