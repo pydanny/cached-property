@@ -17,6 +17,7 @@ except (ImportError, SyntaxError):
 
 class CachedProperty(object):
     """Parent class for cached properties."""
+
     # As of now, it is only used for ``isinstance`` tests. Cf. ``cached_properties_names``.
     pass
 
@@ -196,6 +197,7 @@ def all_members(cls):
             for base in a_class.__bases__:
                 an_mro.extend(recurse(base, recurse))
             return an_mro
+
         mro = getmro(cls, getmro)
     mro.reverse()
     members = {}
@@ -236,8 +238,9 @@ def cached_properties(o):
     my_cached_property
     my_second_cached_property
     """
-    return (k for k, v in all_members(o.__class__).items()
-            if isinstance(v, CachedProperty))
+    return (
+        k for k, v in all_members(o.__class__).items() if isinstance(v, CachedProperty)
+    )
 
 
 def cached_properties_computed(o):
@@ -309,18 +312,14 @@ def delete_cache(o):
 
 
 class property_deleting_cache:
-    """Define a property that deletes the cache when set or deleted.
+    """A property that deletes the cache when set or deleted.
 
     Parameters
     ----------
     func : function
-        The code of the function is not used, only its docstring.
-
-    Returns
-    -------
-    property
-        A property with get, set and delete. When it is set or deleted,
-        it deletes the cache of the object it belongs to.
+        Each time we get the property, this function is run for the sake of
+        its side effects (but its return value is ignored); then the value of
+        the property is accessed.
 
     Examples
     --------
@@ -330,7 +329,59 @@ class property_deleting_cache:
     ...     @property_deleting_cache
     ...     def my_parameter(self):
     ...         "A parameter that deletes the cache when set or deleted."
-    ...         pass
+    ...         print('Accessing my_parameter...')
+    ...     @cached_property
+    ...     def my_cached_property(self):
+    ...         print('Computing my_cached_property...')
+    ...         return self.my_parameter + 1
+    >>> my_object = MyClass(my_parameter=41)
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    Accessing my_parameter...
+    42
+    >>> my_object.my_parameter = 50
+    >>> my_object.my_cached_property
+    Computing my_cached_property...
+    Accessing my_parameter...
+    51
+    >>> MyClass.my_parameter.__doc__
+    'A parameter that deletes the cache when set or deleted.'
+    """
+
+    def __init__(self, func):
+        self.__doc__ = getattr(func, "__doc__")
+        self.func = func
+
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        self.func(obj)
+        return self.value
+
+    def __set__(self, obj, value):
+        delete_cache(obj)
+        self.value = value
+
+    def __delete__(self, obj):
+        delete_cache(obj)
+        del self.value
+
+
+class property_deleting_cache_2:
+    """Define a property that deletes the cache when set or deleted.
+
+    Parameters
+    ----------
+    doc : str
+        The documentation of the property
+
+    Examples
+    --------
+    >>> class MyClass(object):
+    ...     def __init__(self, my_parameter):
+    ...         self.my_parameter = my_parameter
+    ...     my_parameter = property_deleting_cache_2(
+    ...         doc="A parameter that deletes the cache when set or deleted.")
     ...     @cached_property
     ...     def my_cached_property(self):
     ...         print('Computing my_cached_property...')
@@ -346,9 +397,9 @@ class property_deleting_cache:
     >>> MyClass.my_parameter.__doc__
     'A parameter that deletes the cache when set or deleted.'
     """
-    def __init__(self, func):
-        self.__doc__ = getattr(func, "__doc__")
-        self.func = func
+
+    def __init__(self, doc):
+        self.__doc__ = doc
 
     def __get__(self, obj, cls):
         if obj is None:
