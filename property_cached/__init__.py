@@ -1,16 +1,9 @@
-# -*- coding: utf-8 -*-
-
+import asyncio
 import functools
 import pkg_resources
-import sys
 import threading
 import weakref
 from time import time
-
-try:
-    import asyncio
-except (ImportError, SyntaxError):
-    asyncio = None
 
 
 __author__ = "Martin Larralde"
@@ -27,17 +20,7 @@ class cached_property(property):
     """  # noqa
 
     _sentinel = object()
-
-    if sys.version_info[0] < 3:
-
-        def _update_wrapper(self, func):
-            self.__doc__ = getattr(func, "__doc__", None)
-            self.__module__ = getattr(func, "__module__", None)
-            self.__name__ = getattr(func, "__name__", None)
-
-    else:
-
-        _update_wrapper = functools.update_wrapper
+    _update_wrapper = functools.update_wrapper
 
     def __init__(self, func):
         self.cache = weakref.WeakKeyDictionary()

@@ -26,3 +26,4 @@ Contributors
 * Vadim Pushtaev (@VadimPushtaev)
 * Martin Larralde (@althonos)
 * Qudus Oladipo (@stikks)
+* Sean Aubin (@seanny123)

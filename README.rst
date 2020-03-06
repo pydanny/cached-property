@@ -23,14 +23,13 @@ replacement with fully compatible API (import ``property_cached`` instead of
 ``cached_property`` in your code and *voilà*). In case development resumes on
 the original library, this one is likely to be deprecated.
 
-*Original readme included below:*
+*Slightly modified README included below:*
 
 Why?
 -----
 
 * Makes caching of time or computational expensive properties quick and easy.
 * Because I got tired of copy/pasting this code from non-web project to non-web project.
-* I needed something really simple that worked in Python 2 and 3.
 
 How to use it
 --------------
