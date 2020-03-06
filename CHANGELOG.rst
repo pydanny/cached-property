@@ -3,6 +3,11 @@
 History
 -------
 
+1.6.4 (2020-03-06)
+++++++++++++++++++
+
+* Fix some remaining Python 2 support code (`#25 <https://github.com/althonos/property-cached/pull/25>`_)
+
 1.6.3 (2019-09-07)
 ++++++++++++++++++
 
