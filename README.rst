@@ -229,6 +229,35 @@ Now use it:
 **Note:** The ``ttl`` tools do not reliably allow the clearing of the cache. This
 is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
 
+Working with a Class Property
+-----------------------------
+
+What if you want to cache a property accross different instances, you can use
+``cached_classproperty``. Note that cached_classproperty cannot be invalidated.
+
+.. code-block:: python
+
+    from cached_property import cached_classproperty
+
+    class Monopoly(object):
+
+        boardwalk_price = 500
+
+        @cached_classproperty
+        def boardwalk(cls):
+            cls.boardwalk_price += 50
+            return cls.boardwalk_price
+
+Now use it:
+
+.. code-block:: python
+
+    >>> Monopoly().boardwalk
+    550
+    >>> Monopoly().boardwalk
+    550
+
+
 Credits
 --------
 

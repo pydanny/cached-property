@@ -151,3 +151,24 @@ class threaded_cached_property_with_ttl(cached_property_with_ttl):
 # Alias to make threaded_cached_property_with_ttl easier to use
 threaded_cached_property_ttl = threaded_cached_property_with_ttl
 timed_threaded_cached_property = threaded_cached_property_with_ttl
+
+
+class cached_classproperty(object):
+    """
+    A property that is only computed once per class and then replaces
+    itself with an ordinary attribute. Deleting the attribute resets the
+    property.
+    """
+
+    def __init__(self, func):
+        self.__doc__ = getattr(func, '__doc__')
+        self.func = func
+
+    def __get__(self, obj, cls):
+        if obj is None and cls is None:
+            return self
+        if cls is None:
+            cls = type(obj)
+        value = self.func(cls)
+        setattr(cls, self.func.__name__, value)
+        return value
