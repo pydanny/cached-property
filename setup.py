@@ -23,6 +23,11 @@ readme = read("README.rst")
 history = read("HISTORY.rst").replace(".. :changelog:", "")
 
 if sys.argv[-1] == "publish":
+    try:
+        import wheel
+        import twine
+    except (ImportError, ModuleNotFoundError):
+        raise ModuleNotFoundError('Run "pip install wheel twine"')
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
