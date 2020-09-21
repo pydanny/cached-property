@@ -1,8 +1,8 @@
 # cached-property
 
-[![](https://github.com/pydanny/cached-property/workflows/Python%20package/badge.svg)](https://github.com/pydanny/cached-property/actions)
+[![Github Actions status](https://github.com/pydanny/cached-property/workflows/Python%20package/badge.svg)](https://github.com/pydanny/cached-property/actions)
 [![PyPI](https://img.shields.io/pypi/v/cached-property.svg)](https://pypi.python.org/pypi/cached-property)
-[![Code style: black ](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 A decorator for caching properties in classes.
 
@@ -216,7 +216,7 @@ is why they are broken out into seperate tools. See https://github.com/pydanny/c
 
 * Pip, Django, Werkzueg, Bottle, Pyramid, and Zope for having their own implementations. This package originally used an implementation that matched the Bottle version.
 * Reinout Van Rees for pointing out the `cached_property` decorator to me.
-* My awesome wife [@audreyr](https://github.com/audreyfeldroy) who created [`cookiecutter`](https://github.com/cookiecutter/cookiecutter), which meant rolling this out took me just 15 minutes.
+* My awesome wife [@audreyfeldroy](https://github.com/audreyfeldroy) who created [`cookiecutter`](https://github.com/cookiecutter/cookiecutter), which meant rolling this out took me just 15 minutes.
 * @tinche for pointing out the threading issue and providing a solution.
 * @bcho for providing the time-to-expire feature
 
@@ -226,6 +226,6 @@ This project is maintained by volunteers. Support their efforts by spreading the
 
 ### Django Crash Course
 
-[![](https://cdn.shopify.com/s/files/1/0304/6901/products/AWoD-Front-5.5x8.5in_540x.jpg?v=1600471198)](https://www.feldroy.com/products/django-crash-course)
+[![A Wedge of Django](https://cdn.shopify.com/s/files/1/0304/6901/products/AWoD-Front-5.5x8.5in_540x.jpg?v=1600471198)](https://www.feldroy.com/products/django-crash-course)
 
 Django Crash Course for Django 3.0 and Python 3.8 is the best cheese-themed Django reference in the universe!
