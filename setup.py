@@ -10,7 +10,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = "1.5.1"
+__version__ = "1.5.2"
 
 
 def read(fname):
@@ -23,6 +23,11 @@ readme = read("README.rst")
 history = read("HISTORY.rst").replace(".. :changelog:", "")
 
 if sys.argv[-1] == "publish":
+    try:
+        import wheel
+        import twine
+    except: # Yes, this is not how we usually do try/except
+        raise ImportError('Run "pip install wheel twine"')
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
@@ -34,6 +39,7 @@ setup(
     version=__version__,
     description="A decorator for caching properties in classes.",
     long_description=readme + "\n\n" + history,
+    long_description_content_type="text/x-rst",
     author="Daniel Greenfeld",
     author_email="pydanny@gmail.com",
     url="https://github.com/pydanny/cached-property",
@@ -49,10 +55,10 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3",     
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
 )
