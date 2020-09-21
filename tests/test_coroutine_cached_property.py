@@ -57,7 +57,7 @@ class TestCachedProperty(unittest.TestCase):
         """
         Assert that both `add_control` and 'control_total` equal `expected`
         """
-        value = yield from check.add_control()
+        value = yield from check.add_control()  # noqa
         self.assertEqual(value, expected)
         self.assertEqual(check.control_total, expected)
 
