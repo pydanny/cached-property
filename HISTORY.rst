@@ -3,6 +3,12 @@
 History
 -------
 
+2.0 (2020-09-21)
+++++++++++++++++++
+
+* Remove formal support for Python 2.7
+* Convert RST to MD
+
 1.5.2 (2020-09-21)
 ++++++++++++++++++
 
