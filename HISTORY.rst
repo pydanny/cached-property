@@ -3,6 +3,14 @@
 History
 -------
 
+1.5.2 (2020-09-21)
+++++++++++++++++++
+
+* Add formal support for Python 3.8
+* Remove formal support for Python 3.4
+* Switch from Travis to GitHub actions
+* Made tests pass flake8 for Python 2.7
+
 1.5.1 (2018-08-05)
 ++++++++++++++++++
 

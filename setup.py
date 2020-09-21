@@ -10,7 +10,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = "1.5.1"
+__version__ = "1.5.2"
 
 
 def read(fname):
@@ -54,8 +54,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",        
+        "Programming Language :: Python :: 3",     
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

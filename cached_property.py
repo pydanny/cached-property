@@ -2,7 +2,7 @@
 
 __author__ = "Daniel Greenfeld"
 __email__ = "pydanny@gmail.com"
-__version__ = "1.5.1"
+__version__ = "1.5.2"
 __license__ = "BSD"
 
 from functools import wraps
