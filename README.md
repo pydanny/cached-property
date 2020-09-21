@@ -18,17 +18,17 @@ Let's define a class with an expensive property. Every time you stay there the
 price goes up by $50!
 
 ```python
-    class Monopoly(object):
+class Monopoly(object):
 
-        def __init__(self):
-            self.boardwalk_price = 500
+    def __init__(self):
+        self.boardwalk_price = 500
 
-        @property
-        def boardwalk(self):
-            # In reality, this might represent a database call or time
-            # intensive task like calling a third-party API.
-            self.boardwalk_price += 50
-            return self.boardwalk_price
+    @property
+    def boardwalk(self):
+        # In reality, this might represent a database call or time
+        # intensive task like calling a third-party API.
+        self.boardwalk_price += 50
+        return self.boardwalk_price
 ```
 
 Now run it:
@@ -44,19 +44,19 @@ Now run it:
 Let's convert the boardwalk property into a `cached_property`.
 
 ```python
-    from cached_property import cached_property
+from cached_property import cached_property
 
-    class Monopoly(object):
+class Monopoly(object):
 
-        def __init__(self):
-            self.boardwalk_price = 500
+    def __init__(self):
+        self.boardwalk_price = 500
 
-        @cached_property
-        def boardwalk(self):
-            # Again, this is a silly example. Don't worry about it, this is
-            #   just an example for clarity.
-            self.boardwalk_price += 50
-            return self.boardwalk_price
+    @cached_property
+    def boardwalk(self):
+        # Again, this is a silly example. Don't worry about it, this is
+        #   just an example for clarity.
+        self.boardwalk_price += 50
+        return self.boardwalk_price
 ```
 
 Now when we run it the price stays at $550.
