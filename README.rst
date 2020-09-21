@@ -248,7 +248,7 @@ Support This Project
 This project is maintained by volunteers. Support their efforts by spreading the word about:
 
 Django Crash Course
-~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++
 
 .. image:: https://cdn.shopify.com/s/files/1/0304/6901/files/Django-Crash-Course-300x436.jpg
    :name: Django Crash Course: Covers Django 3.0 and Python 3.8

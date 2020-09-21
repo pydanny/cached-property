@@ -39,6 +39,7 @@ setup(
     version=__version__,
     description="A decorator for caching properties in classes.",
     long_description=readme + "\n\n" + history,
+    long_description_content_type="text/x-rst",
     author="Daniel Greenfeld",
     author_email="pydanny@gmail.com",
     url="https://github.com/pydanny/cached-property",
