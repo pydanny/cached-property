@@ -4,9 +4,10 @@ cached-property
 
 .. image:: https://img.shields.io/pypi/v/cached-property.svg
     :target: https://pypi.python.org/pypi/cached-property
-
-.. image:: https://img.shields.io/travis/pydanny/cached-property/master.svg
-    :target: https://travis-ci.org/pydanny/cached-property
+    
+.. image:: https://github.com/pydanny/cached-property/workflows/Python%20package/badge.svg
+    :target: https://github.com/pydanny/cached-property/actions 
+    
         
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/ambv/black
