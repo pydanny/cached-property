@@ -19,8 +19,8 @@ def read(fname):
     ).read()
 
 
-readme = read("README.rst")
-history = read("HISTORY.rst").replace(".. :changelog:", "")
+readme = read("README.md")
+history = read("HISTORY.md")
 
 if sys.argv[-1] == "publish":
     try:
@@ -39,7 +39,7 @@ setup(
     version=__version__,
     description="A decorator for caching properties in classes.",
     long_description=readme + "\n\n" + history,
-    long_description_content_type="text/x-rst",
+    long_description_content_type="text/x-md",
     author="Daniel Greenfeld",
     author_email="pydanny@gmail.com",
     url="https://github.com/pydanny/cached-property",
