@@ -29,7 +29,7 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
             self.cached_total = 0
             self.lock = Lock()
 
-        async def add_control(self):
+        async def add_control(self): # noqa
             self.control_total += 1
             return self.control_total
 
