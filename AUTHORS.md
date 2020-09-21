@@ -1,15 +1,12 @@
-=======
-Credits
-=======
+# Credits
 
-Development Lead
-----------------
+## Development Lead
 
 * Daniel Roy Greenfeld (@pydanny)
-* Audrey Roy Greenfeld (@audreyr)
 
-Contributors
-------------
+* Audrey Roy Greenfeld (@audreyfeldroy)
+
+## Contributors
 
 * Tin Tvrtković <tinchester@gmail.com>
 * @bcho <bcho@vtmer.com>
