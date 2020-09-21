@@ -1,6 +1,5 @@
 # Testing and deployment packages.
-coverage==5.3
-flake8==3.8.3
-pytest==6.0.2
-pytest-cov==2.10.1
-freezegun==1.0.0
+coverage==4.4.2
+pytest==3.8.2
+pytest-cov==2.6.0
+freezegun==0.3.10
