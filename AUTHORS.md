@@ -16,3 +16,4 @@
 * Malyshev Artem (@proofit404)
 * Volker Braun (@vbraun)
 * Qudus Oladipo (@stikks)
+* Bartosz Sokorski (@secrus)
