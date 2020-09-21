@@ -26,8 +26,8 @@ if sys.argv[-1] == "publish":
     try:
         import wheel
         import twine
-    except (ImportError, ModuleNotFoundError):
-        raise ModuleNotFoundError('Run "pip install wheel twine"')
+    except: # Yes, this is not how we usually do try/except
+        raise ImportError('Run "pip install wheel twine"')
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     os.system("git tag -a %s -m 'version %s'" % (__version__, __version__))
