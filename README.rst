@@ -250,10 +250,10 @@ This project is maintained by volunteers. Support their efforts by spreading the
 Django Crash Course
 ++++++++++++++++++++++++++++++++++++
 
-.. image:: https://cdn.shopify.com/s/files/1/0304/6901/files/Django-Crash-Course-300x436.jpg
-   :name: Django Crash Course: Covers Django 3.0 and Python 3.8
+.. image:: https://cdn.shopify.com/s/files/1/0304/6901/products/AWoD-Front-5.5x8.5in_1024x1024@2x.jpg
+   :name: A Wedge of Django: Covers Django 3.x and Python 3.8
    :align: center
-   :alt: Django Crash Course
-   :target: https://www.roygreenfeld.com/products/django-crash-course
+   :alt: A Wedge of Django
+   :target: https://www.feldroy.com/products/django-crash-course
 
-Django Crash Course for Django 3.0 and Python 3.8 is the best cheese-themed Django reference in the universe!
+A Wedge of Django is a crash course for Django 3.3 and Python 3.8 is the best cheese-themed Django reference in the universe!
