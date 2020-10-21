@@ -220,12 +220,3 @@ is why they are broken out into seperate tools. See https://github.com/pydanny/c
 * @tinche for pointing out the threading issue and providing a solution.
 * @bcho for providing the time-to-expire feature
 
-## Support this project
-
-This project is maintained by volunteers. Support their efforts by spreading the word about:
-
-### Django Crash Course
-
-[![A Wedge of Django](https://cdn.shopify.com/s/files/1/0304/6901/products/AWoD-Front-5.5x8.5in_540x.jpg?v=1600471198)](https://www.feldroy.com/products/django-crash-course)
-
-Django Crash Course for Django 3.0 and Python 3.8 is the best cheese-themed Django reference in the universe!
