@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 import time
 import unittest
 from threading import Lock, Thread
@@ -8,11 +9,22 @@ from freezegun import freeze_time
 import cached_property
 
 
-def CheckFactory(cached_property_decorator, threadsafe=False):
+def CheckFactory(cached_property_decorator, threadsafe=False, change_name=False):
     """
     Create dynamically a Check class whose add_cached method is decorated by
     the cached_property_decorator.
     """
+
+    def add_cached_func(self):
+        if threadsafe:
+            time.sleep(1)
+            # Need to guard this since += isn't atomic.
+            with self.lock:
+                self.cached_total += 1
+        else:
+            self.cached_total += 1
+
+        return self.cached_total
 
     class Check(object):
         def __init__(self):
@@ -25,17 +37,15 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
             self.control_total += 1
             return self.control_total
 
-        @cached_property_decorator
-        def add_cached(self):
-            if threadsafe:
-                time.sleep(1)
-                # Need to guard this since += isn't atomic.
-                with self.lock:
-                    self.cached_total += 1
-            else:
-                self.cached_total += 1
+        if change_name:
+            def add_cached_orig(self):
+                return add_cached_func(self)
 
-            return self.cached_total
+            add_cached = cached_property_decorator(add_cached_orig)
+        else:
+            @cached_property_decorator
+            def add_cached(self):
+                return add_cached_func(self)
 
         def run_threads(self, num_threads):
             threads = []
@@ -120,6 +130,13 @@ class TestCachedProperty(unittest.TestCase):
         check.add_cached = "foo"
         self.assertEqual(check.add_cached, "foo")
         self.assertEqual(check.cached_total, 0)
+
+    @unittest.skipUnless(sys.version_info >= (3, 6), 'No __set_name__ support until Python 3.6')
+    def test_cached_property_change_name(self):
+        Check = CheckFactory(self.cached_property_factory, change_name=True)
+        check = Check()
+        self.assertEqual(check.add_cached, 1)
+        self.assertEqual(check.add_cached_orig(), 2)
 
     def test_threads(self):
         Check = CheckFactory(self.cached_property_factory, threadsafe=True)
