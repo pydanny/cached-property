@@ -70,8 +70,9 @@ class threaded_cached_property(object):
                 return obj_dict[name]
 
             except KeyError:
-                # if not, do the calculation and release the lock
-                return obj_dict.setdefault(name, self.func(obj))
+                pass
+            # if not, do the calculation and release the lock
+            return obj_dict.setdefault(name, self.func(obj))
 
 
 class cached_property_with_ttl(object):
