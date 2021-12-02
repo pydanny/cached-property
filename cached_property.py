@@ -13,12 +13,12 @@ try:
     import asyncio
 except (ImportError, SyntaxError):
     asyncio = None
-try:
-    iscoroutinefunction = asyncio.iscoroutinefunction
-except AttributeError:
-    # Python 3.11: @asyncio.coroutine was removed
-    from inspect import iscoroutinefunction
-
+if asyncio:
+    try:
+        iscoroutinefunction = asyncio.iscoroutinefunction
+    except AttributeError:
+        # Python 3.11: @asyncio.coroutine was removed
+        from inspect import iscoroutinefunction
 
 
 class cached_property(object):
