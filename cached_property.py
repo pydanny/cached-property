@@ -4,6 +4,7 @@ __version__ = "2.0.1"
 __license__ = "BSD"
 
 from functools import wraps
+from inspect import iscoroutinefunction
 from time import time
 import threading
 import asyncio
@@ -24,20 +25,13 @@ class cached_property:
         if obj is None:
             return self
 
-        if asyncio.iscoroutinefunction(self.func):
-            return self._wrap_in_coroutine(obj)
+        if iscoroutinefunction(self.func):
+            value = asyncio.ensure_future(self.func(obj))
+        else:
+            value = self.func(obj)
 
-        value = obj.__dict__[self.func.__name__] = self.func(obj)
+        obj.__dict__[self.func.__name__] = value
         return value
-
-    def _wrap_in_coroutine(self, obj):
-        @wraps(obj)
-        def wrapper():
-            future = asyncio.ensure_future(self.func(obj))
-            obj.__dict__[self.func.__name__] = future
-            return future
-
-        return wrapper()
 
 
 class threaded_cached_property:
