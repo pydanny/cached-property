@@ -210,7 +210,7 @@ Now use it:
 ```
 
 **Note:** The `ttl` tools do not reliably allow the clearing of the cache. This
-is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
+is why they are broken out into separate tools. See https://github.com/pydanny/cached-property/issues/16.
 
 ## Credits
 

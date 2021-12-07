@@ -63,7 +63,7 @@
 ## 1.0.0 (2015-02-13)
 
 * Added timed to expire feature to `cached_property` decorator.
-* **Backwards incompatiblity**: Changed `del monopoly.boardwalk` to `del monopoly['boardwalk']` in order to support the new TTL feature.
+* **Backwards incompatibility**: Changed `del monopoly.boardwalk` to `del monopoly['boardwalk']` in order to support the new TTL feature.
 
 ## 0.1.5 (2014-05-20)
 
