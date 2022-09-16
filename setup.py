@@ -45,7 +45,7 @@ setup(
     url="https://github.com/pydanny/cached-property",
     py_modules=["cached_property"],
     include_package_data=True,
-    license="BSD",
+    license="BSD-3-Clause",
     zip_safe=False,
     keywords="cached-property",
     classifiers=[
