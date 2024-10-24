@@ -1,21 +1,15 @@
-# -*- coding: utf-8 -*-
-
 __author__ = "Daniel Greenfeld"
 __email__ = "pydanny@gmail.com"
-__version__ = "1.5.2"
+__version__ = "2.0.0"
 __license__ = "BSD"
 
 from functools import wraps
 from time import time
 import threading
-
-try:
-    import asyncio
-except (ImportError, SyntaxError):
-    asyncio = None
+import asyncio
 
 
-class cached_property(object):
+class cached_property:
     """
     A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Deleting the attribute resets the property.
@@ -30,7 +24,7 @@ class cached_property(object):
         if obj is None:
             return self
 
-        if asyncio and asyncio.iscoroutinefunction(self.func):
+        if asyncio.iscoroutinefunction(self.func):
             return self._wrap_in_coroutine(obj)
 
         value = obj.__dict__[self.func.__name__] = self.func(obj)
@@ -38,7 +32,6 @@ class cached_property(object):
 
     def _wrap_in_coroutine(self, obj):
         @wraps(obj)
-        @asyncio.coroutine
         def wrapper():
             future = asyncio.ensure_future(self.func(obj))
             obj.__dict__[self.func.__name__] = future
@@ -47,7 +40,7 @@ class cached_property(object):
         return wrapper()
 
 
-class threaded_cached_property(object):
+class threaded_cached_property:
     """
     A cached_property version for use in environments where multiple threads
     might concurrently try to access the property.
@@ -74,7 +67,7 @@ class threaded_cached_property(object):
                 return obj_dict.setdefault(name, self.func(obj))
 
 
-class cached_property_with_ttl(object):
+class cached_property_with_ttl:
     """
     A property that is only computed once per instance and then replaces itself
     with an ordinary attribute. Setting the ttl to a number expresses how long

@@ -18,7 +18,7 @@ Let's define a class with an expensive property. Every time you stay there the
 price goes up by $50!
 
 ```python
-class Monopoly(object):
+class Monopoly:
 
     def __init__(self):
         self.boardwalk_price = 500
@@ -101,7 +101,7 @@ unfortunately causes problems with the standard `cached_property`. In this case,
 ```python
 from cached_property import threaded_cached_property
 
-class Monopoly(object):
+class Monopoly:
 
     def __init__(self):
         self.boardwalk_price = 500
@@ -135,7 +135,7 @@ Now use it:
 >>> self.assertEqual(m.boardwalk, 550)
 ```
 
-## Working with async/await (Python 3.5+)
+## Working with async/await
 
 The cached property can be async, in which case you have to use await
 as usual to get the value. Because of the caching, the value is only
@@ -144,7 +144,7 @@ computed once and then cached:
 ```python
 from cached_property import cached_property
 
-class Monopoly(object):
+class Monopoly:
 
     def __init__(self):
         self.boardwalk_price = 500
@@ -214,7 +214,7 @@ is why they are broken out into seperate tools. See https://github.com/pydanny/c
 
 ## Credits
 
-* Pip, Django, Werkzueg, Bottle, Pyramid, and Zope for having their own implementations. This package originally used an implementation that matched the Bottle version.
+* Pip, Django, Werkzeug, Bottle, Pyramid, and Zope for having their own implementations. This package originally used an implementation that matched the Bottle version.
 * Reinout Van Rees for pointing out the `cached_property` decorator to me.
 * My awesome wife [@audreyfeldroy](https://github.com/audreyfeldroy) who created [`cookiecutter`](https://github.com/cookiecutter/cookiecutter), which meant rolling this out took me just 15 minutes.
 * @tinche for pointing out the threading issue and providing a solution.

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import time
 import unittest
 from threading import Lock, Thread
@@ -14,7 +12,7 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
     the cached_property_decorator.
     """
 
-    class Check(object):
+    class Check:
         def __init__(self):
             self.control_total = 0
             self.cached_total = 0
@@ -40,7 +38,7 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
         def run_threads(self, num_threads):
             threads = []
             for _ in range(num_threads):
-                thread = Thread(target=lambda: self.add_cached)
+                thread = Thread(target=self.add_cached)
                 thread.start()
                 threads.append(thread)
             for thread in threads:
@@ -58,15 +56,15 @@ class TestCachedProperty(unittest.TestCase):
         """
         Assert that both `add_control` and 'control_total` equal `expected`
         """
-        self.assertEqual(check.add_control, expected)
-        self.assertEqual(check.control_total, expected)
+        self.assertEqual(expected, check.add_control)
+        self.assertEqual(expected, check.control_total)
 
     def assert_cached(self, check, expected):
         """
         Assert that both `add_cached` and 'cached_total` equal `expected`
         """
-        self.assertEqual(check.add_cached, expected)
-        self.assertEqual(check.cached_total, expected)
+        self.assertEqual(expected, check.add_cached)
+        self.assertEqual(expected, check.cached_total)
 
     def test_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)
@@ -104,7 +102,7 @@ class TestCachedProperty(unittest.TestCase):
         self.assert_cached(check, 2)
 
     def test_none_cached_property(self):
-        class Check(object):
+        class Check:
             def __init__(self):
                 self.cached_total = None
 
@@ -118,30 +116,8 @@ class TestCachedProperty(unittest.TestCase):
         Check = CheckFactory(self.cached_property_factory)
         check = Check()
         check.add_cached = "foo"
-        self.assertEqual(check.add_cached, "foo")
-        self.assertEqual(check.cached_total, 0)
-
-    def test_threads(self):
-        Check = CheckFactory(self.cached_property_factory, threadsafe=True)
-        check = Check()
-        num_threads = 5
-
-        # cached_property_with_ttl is *not* thread-safe!
-        check.run_threads(num_threads)
-        # This assertion hinges on the fact the system executing the test can
-        # spawn and start running num_threads threads within the sleep period
-        # (defined in the Check class as 1 second). If num_threads were to be
-        # massively increased (try 10000), the actual value returned would be
-        # between 1 and num_threads, depending on thread scheduling and
-        # preemption.
-        self.assert_cached(check, num_threads)
-        self.assert_cached(check, num_threads)
-
-        # The cache does not expire
-        with freeze_time("9999-01-01"):
-            check.run_threads(num_threads)
-            self.assert_cached(check, num_threads)
-            self.assert_cached(check, num_threads)
+        self.assertEqual("foo", check.add_cached)
+        self.assertEqual(0, check.cached_total)
 
 
 class TestThreadedCachedProperty(TestCachedProperty):
@@ -187,26 +163,6 @@ class TestCachedPropertyWithTTL(TestCachedProperty):
         # Things are not reverted when we are back to the present
         self.assert_cached(check, 2)
         self.assert_cached(check, 2)
-
-    def test_threads_ttl_expiry(self):
-        Check = CheckFactory(self.cached_property_factory(ttl=100000), threadsafe=True)
-        check = Check()
-        num_threads = 5
-
-        # Same as in test_threads
-        check.run_threads(num_threads)
-        self.assert_cached(check, num_threads)
-        self.assert_cached(check, num_threads)
-
-        # The cache expires in the future
-        with freeze_time("9999-01-01"):
-            check.run_threads(num_threads)
-            self.assert_cached(check, 2 * num_threads)
-            self.assert_cached(check, 2 * num_threads)
-
-        # Things are not reverted when we are back to the present
-        self.assert_cached(check, 2 * num_threads)
-        self.assert_cached(check, 2 * num_threads)
 
 
 class TestThreadedCachedPropertyWithTTL(

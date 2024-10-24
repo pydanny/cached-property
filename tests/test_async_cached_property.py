@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import asyncio
 import time
 import unittest
@@ -7,23 +6,13 @@ from freezegun import freeze_time
 import cached_property
 
 
-def unittest_run_loop(f):
-    def wrapper(*args, **kwargs):
-        coro = asyncio.coroutine(f)
-        future = coro(*args, **kwargs)
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(future)
-
-    return wrapper
-
-
 def CheckFactory(cached_property_decorator, threadsafe=False):
     """
     Create dynamically a Check class whose add_cached method is decorated by
     the cached_property_decorator.
     """
 
-    class Check(object):
+    class Check:
         def __init__(self):
             self.control_total = 0
             self.cached_total = 0
@@ -63,7 +52,7 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
     return Check
 
 
-class TestCachedProperty(unittest.TestCase):
+class TestCachedProperty(unittest.IsolatedAsyncioTestCase):
     """Tests for cached_property"""
 
     cached_property_factory = cached_property.cached_property
@@ -72,18 +61,17 @@ class TestCachedProperty(unittest.TestCase):
         """
         Assert that both `add_control` and 'control_total` equal `expected`
         """
-        self.assertEqual(await check.add_control(), expected)
-        self.assertEqual(check.control_total, expected)
+        self.assertEqual(expected, await check.add_control())
+        self.assertEqual(expected, check.control_total)
 
     async def assert_cached(self, check, expected):
         """
         Assert that both `add_cached` and 'cached_total` equal `expected`
         """
         print("assert_cached", check.add_cached)
-        self.assertEqual(await check.add_cached, expected)
-        self.assertEqual(check.cached_total, expected)
+        self.assertEqual(expected, await check.add_cached)
+        self.assertEqual(expected, check.cached_total)
 
-    @unittest_run_loop
     async def test_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)
         check = Check()
@@ -104,7 +92,6 @@ class TestCachedProperty(unittest.TestCase):
         # rather than through an instance.
         self.assertTrue(isinstance(Check.add_cached, self.cached_property_factory))
 
-    @unittest_run_loop
     async def test_reset_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)
         check = Check()
@@ -120,9 +107,8 @@ class TestCachedProperty(unittest.TestCase):
         await self.assert_cached(check, 2)
         await self.assert_cached(check, 2)
 
-    @unittest_run_loop
     async def test_none_cached_property(self):
-        class Check(object):
+        class Check:
             def __init__(self):
                 self.cached_total = None
 

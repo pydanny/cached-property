@@ -1,9 +1,9 @@
 # History
 
-## 2.0 (2020-09-??)
+## 2.0.0 (2024-??-??)
 
-* Remove formal support for Python 2.7
-* Convert RST to MD
+* Remove support for Python versions < 3.8
+* Add formal support for Python versions up to 3.13
 
 ## 1.5.2 (2020-09-21)
 
