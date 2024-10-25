@@ -1,9 +1,11 @@
 # History
 
-## 2.0.0 (2024-??-??)
+## 2.0.0 (2024-10-25)
 
 * Remove support for Python versions < 3.8
 * Add formal support for Python versions up to 3.13
+* Switch to Markdown for docs
+* Migrate from black to ruff
 
 ## 1.5.2 (2020-09-21)
 
