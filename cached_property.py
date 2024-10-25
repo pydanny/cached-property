@@ -1,6 +1,6 @@
-__author__ = "Daniel Greenfeld"
-__email__ = "pydanny@gmail.com"
-__version__ = "2.0.0"
+__author__ = "Daniel Roy Greenfeld"
+__email__ = "daniel@feldroy.com"
+__version__ = "2.0.1"
 __license__ = "BSD"
 
 from functools import wraps

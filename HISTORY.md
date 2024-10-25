@@ -1,5 +1,10 @@
 # History
 
+## 2.0.1 (2024-10-25)
+
+* Via `python_requires` specifies that cached_property is for Python version 3.8 or higher
+* Officiall drop support for Python 2.6
+
 ## 2.0.0 (2024-10-25)
 
 * Remove support for Python versions < 3.8

@@ -9,7 +9,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = "2.0"
+__version__ = "2.0.1"
 
 
 def read(fname):
@@ -39,6 +39,7 @@ setup(
     description="A decorator for caching properties in classes.",
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/markdown",
+    python_requires=">=3.8",
     author="Daniel Roy Greenfeld",
     author_email="daniel@feldroy.com",
     url="https://github.com/pydanny/cached-property",
