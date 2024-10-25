@@ -144,3 +144,14 @@ class threaded_cached_property_with_ttl(cached_property_with_ttl):
 # Alias to make threaded_cached_property_with_ttl easier to use
 threaded_cached_property_ttl = threaded_cached_property_with_ttl
 timed_threaded_cached_property = threaded_cached_property_with_ttl
+
+
+def invalidate_cached_property(o, name):
+    """
+    Invalidates the cached property so it will be re-computed again for the next access.
+
+    :param o: The object which property should be invalidated.
+    :param name: The property name to be invalidated.
+    """
+    if hasattr(o, name):
+        delattr(o, name)
