@@ -103,13 +103,16 @@ Before you submit a pull request, check that it meets these guidelines:
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
-3. The pull request should work for Python 2.7, and 3.3, 3.4, 3.5, 3.6 and for PyPy. Check https://travis-ci.org/pydanny/cached-property/pull_requests and make sure that the tests pass for all supported Python versions.
+   feature to the list in README.md.
+3. The pull request should work for all Python versions defined as classifiers in `setup.py`.
+   Make sure that the [GitHub Action tests](https://github.com/pydanny/cached-property/actions) 
+   pass for all supported Python versions.
 
 ## Tips
 
 To run a subset of tests:
 
 ```bash
-$ python -m unittest tests.test_cached-property
+$ pytest tests/test_cached-property.py
+$ pytest tests/test_cached-property.py::TestCachedProperty
 ```
