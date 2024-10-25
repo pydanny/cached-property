@@ -11,6 +11,7 @@ A decorator for caching properties in classes.
 * Makes caching of time or computational expensive properties quick and easy.
 * Because I got tired of copy/pasting this code from non-web project to non-web project.
 * I needed something really simple that worked in Python 2 and 3.
+  (Python 3.8 added a version of this decorator as [`@functools.cached_property`](https://docs.python.org/3.12/library/functools.html#functools.cached_property).)
 
 ## How to use it
 
