@@ -2,7 +2,7 @@
 
 [![Github Actions status](https://github.com/pydanny/cached-property/workflows/Python%20package/badge.svg)](https://github.com/pydanny/cached-property/actions)
 [![PyPI](https://img.shields.io/pypi/v/cached-property.svg)](https://pypi.python.org/pypi/cached-property)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
 A decorator for caching properties in classes.
 

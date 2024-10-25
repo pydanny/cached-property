@@ -70,11 +70,11 @@ Ready to contribute? Here's how to set up `cached-property` for local developmen
 
     Now you can make your changes locally.
 
-5. Clean up the formatting (must be running at least Python 3.6):
+5. Clean up the formatting (must be running at least Python 3.8):
 
     ```bash
-    $ pip install -U black
-    $ black .
+    $ pip install -U ruff
+    $ ruff format .
     ```
 
 6. When you're done making changes, check that your changes pass the tests, including testing other Python versions with tox:
