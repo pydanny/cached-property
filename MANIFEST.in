@@ -3,6 +3,7 @@ include CONTRIBUTING.md
 include HISTORY.md
 include LICENSE
 include README.md
+include tox.ini
 
 recursive-include tests *
 recursive-exclude * __pycache__
