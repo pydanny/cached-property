@@ -210,6 +210,13 @@ Now use it:
 3
 ```
 
+Async methods are also supported by `cached_property_with_ttl`: await the
+property as with `cached_property`. Repeated access before expiry shares the
+same task, including its result or exception. After expiry, the next access
+starts a new task. Expiry does not cancel a task already in progress. Access
+async cached properties from the same running event loop; this does not make
+asyncio tasks safe to share across threads.
+
 **Note:** The `ttl` tools do not reliably allow the clearing of the cache. This
 is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
 

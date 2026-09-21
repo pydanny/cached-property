@@ -104,6 +104,9 @@ class cached_property_with_ttl:
                 return value
 
         value = self.func(obj)
+        if asyncio.iscoroutinefunction(self.func):
+            # Cache a reusable task, not a coroutine that can only be awaited once.
+            value = asyncio.ensure_future(value)
         obj_dict[name] = (value, now)
         return value
 
