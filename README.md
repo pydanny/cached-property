@@ -210,8 +210,16 @@ Now use it:
 3
 ```
 
-**Note:** The `ttl` tools do not reliably allow the clearing of the cache. This
-is why they are broken out into seperate tools. See https://github.com/pydanny/cached-property/issues/16.
+You can also clear a cached value before its `ttl` expires by deleting the
+property:
+
+```python
+>>> del monopoly.dice
+>>> monopoly.dice  # Computes and caches a new roll.
+```
+
+This works with both `cached_property_with_ttl` and
+`threaded_cached_property_with_ttl`. The next access starts a new `ttl` period.
 
 ## Credits
 
@@ -220,4 +228,3 @@ is why they are broken out into seperate tools. See https://github.com/pydanny/c
 * My awesome wife [@audreyfeldroy](https://github.com/audreyfeldroy) who created [`cookiecutter`](https://github.com/cookiecutter/cookiecutter), which meant rolling this out took me just 15 minutes.
 * @tinche for pointing out the threading issue and providing a solution.
 * @bcho for providing the time-to-expire feature
-
