@@ -147,6 +147,28 @@ class TestCachedPropertyWithTTL(TestCachedProperty):
 
     cached_property_factory = cached_property.cached_property_with_ttl
 
+    def test_ttl_starts_after_computation(self):
+        with freeze_time("2020-01-01") as clock:
+
+            class Check:
+                calls = 0
+
+                @self.cached_property_factory(ttl=1)
+                def value(self):
+                    self.calls += 1
+                    clock.tick(2)
+                    return self.calls
+
+            check = Check()
+            self.assertEqual(check.value, 1)
+            self.assertEqual(check.value, 1)
+            clock.tick(0.5)
+            self.assertEqual(check.value, 1)
+            clock.tick(0.6)
+            self.assertEqual(check.value, 2)
+            self.assertEqual(check.value, 2)
+            self.assertEqual(check.calls, 2)
+
     def test_ttl_expiry(self):
         Check = CheckFactory(self.cached_property_factory(ttl=100000))
         check = Check()

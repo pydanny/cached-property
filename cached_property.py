@@ -104,7 +104,7 @@ class cached_property_with_ttl:
                 return value
 
         value = self.func(obj)
-        obj_dict[name] = (value, now)
+        obj_dict[name] = (value, time())
         return value
 
     def __delete__(self, obj):
