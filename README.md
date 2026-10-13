@@ -180,7 +180,9 @@ or threading, but not both at the same time.
 ## Timing out the cache
 
 Sometimes you want the price of things to reset after a time. Use the `ttl`
-versions of `cached_property` and `threaded_cached_property`.
+versions of `cached_property` and `threaded_cached_property`. The TTL starts when
+computation finishes, so an expensive property remains cached for the full TTL
+after its value is available.
 
 ```python
 import random
