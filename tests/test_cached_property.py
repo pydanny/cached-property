@@ -86,6 +86,22 @@ class TestCachedProperty(unittest.TestCase):
         # rather than through an instance.
         self.assertTrue(isinstance(Check.add_cached, self.cached_property_factory))
 
+    def test_failed_override_does_not_cache_parent_value(self):
+        Parent = CheckFactory(self.cached_property_factory)
+
+        class Child(Parent):
+            @self.cached_property_factory
+            def add_cached(inst):
+                value = super(Child, inst).add_cached
+                raise ValueError(value)
+
+        check = Child()
+        for expected in (1, 2):
+            with self.assertRaises(ValueError) as error:
+                _ = check.add_cached
+            self.assertEqual(error.exception.args, (expected,))
+            self.assertNotIn("add_cached", check.__dict__)
+
     def test_reset_cached_property(self):
         Check = CheckFactory(self.cached_property_factory)
         check = Check()

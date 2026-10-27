@@ -27,7 +27,13 @@ class cached_property:
         if asyncio.iscoroutinefunction(self.func):
             return self._wrap_in_coroutine(obj)
 
-        value = obj.__dict__[self.func.__name__] = self.func(obj)
+        name = self.func.__name__
+        try:
+            value = self.func(obj)
+        except Exception:
+            obj.__dict__.pop(name, None)
+            raise
+        obj.__dict__[name] = value
         return value
 
     def _wrap_in_coroutine(self, obj):
@@ -64,7 +70,12 @@ class threaded_cached_property:
 
             except KeyError:
                 # if not, do the calculation and release the lock
-                return obj_dict.setdefault(name, self.func(obj))
+                try:
+                    value = self.func(obj)
+                except Exception:
+                    obj_dict.pop(name, None)
+                    raise
+                return obj_dict.setdefault(name, value)
 
 
 class cached_property_with_ttl:
@@ -103,7 +114,11 @@ class cached_property_with_ttl:
             if not ttl_expired:
                 return value
 
-        value = self.func(obj)
+        try:
+            value = self.func(obj)
+        except Exception:
+            obj_dict.pop(name, None)
+            raise
         obj_dict[name] = (value, now)
         return value
 
