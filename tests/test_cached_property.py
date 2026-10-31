@@ -1,6 +1,8 @@
 import time
 import unittest
 from threading import Lock, Thread
+from unittest.mock import patch
+
 from freezegun import freeze_time
 
 import cached_property
@@ -38,13 +40,28 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
         def run_threads(self, num_threads):
             threads = []
             for _ in range(num_threads):
-                thread = Thread(target=self.add_cached)
+                thread = Thread(target=lambda: self.add_cached)
                 thread.start()
                 threads.append(thread)
             for thread in threads:
                 thread.join()
 
     return Check
+
+
+class TestThreadHelper(unittest.TestCase):
+    def test_run_threads_defers_property_access(self):
+        Check = CheckFactory(cached_property.cached_property)
+        check = Check()
+        with patch(__name__ + ".Thread") as thread:
+            check.run_threads(2)
+        self.assertEqual(thread.call_count, 2)
+        self.assertEqual(check.cached_total, 0)
+        for call in thread.call_args_list:
+            target = call.kwargs["target"]
+            self.assertTrue(callable(target))
+            self.assertEqual(target(), 1)
+        self.assertEqual(check.cached_total, 1)
 
 
 class TestCachedProperty(unittest.TestCase):
