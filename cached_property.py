@@ -4,9 +4,32 @@ __version__ = "2.0.1"
 __license__ = "BSD"
 
 from functools import wraps
+from contextlib import contextmanager
 from time import time
 import threading
 import asyncio
+
+
+@contextmanager
+def _instance_lock(descriptor, obj):
+    key = id(obj)
+    with descriptor.lock:
+        entry = descriptor._active_locks.get(key)
+        if entry is None:
+            # Keep the object alive only while readers are active or waiting.
+            entry = [obj, threading.RLock(), 0]
+            descriptor._active_locks[key] = entry
+        entry[2] += 1
+    try:
+        with entry[1]:
+            yield
+    finally:
+        # Release the instance lock before retiring its registry entry. The
+        # local entry reference also keeps object finalizers outside this lock.
+        with descriptor.lock:
+            entry[2] -= 1
+            if entry[2] == 0:
+                del descriptor._active_locks[key]
 
 
 class cached_property:
@@ -50,6 +73,7 @@ class threaded_cached_property:
         self.__doc__ = getattr(func, "__doc__")
         self.func = func
         self.lock = threading.RLock()
+        self._active_locks = {}
 
     def __get__(self, obj, cls):
         if obj is None:
@@ -57,7 +81,7 @@ class threaded_cached_property:
 
         obj_dict = obj.__dict__
         name = self.func.__name__
-        with self.lock:
+        with _instance_lock(self, obj):
             try:
                 # check if the value was computed before the lock was acquired
                 return obj_dict[name]
@@ -135,9 +159,12 @@ class threaded_cached_property_with_ttl(cached_property_with_ttl):
     def __init__(self, ttl=None):
         super(threaded_cached_property_with_ttl, self).__init__(ttl)
         self.lock = threading.RLock()
+        self._active_locks = {}
 
     def __get__(self, obj, cls):
-        with self.lock:
+        if obj is None:
+            return self
+        with _instance_lock(self, obj):
             return super(threaded_cached_property_with_ttl, self).__get__(obj, cls)
 
 
