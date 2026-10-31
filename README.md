@@ -13,6 +13,31 @@ A decorator for caching properties in classes.
 * I needed something really simple that worked in Python 2 and 3.
   (Python 3.8 added a version of this decorator as [`@functools.cached_property`](https://docs.python.org/3.12/library/functools.html#functools.cached_property).)
 
+## Choosing between this package and functools
+
+For ordinary synchronous properties on Python 3.8 or later, consider
+`functools.cached_property` to avoid an extra dependency. Both implementations
+cache the value on the instance and let you clear it by deleting the attribute.
+
+This package also provides:
+
+* [Time-based expiry](#timing-out-the-cache) with `cached_property_with_ttl`.
+* [Async properties](#working-with-asyncawait) with `cached_property`, which caches
+  a task that can be awaited repeatedly on the same event loop.
+  Decorating an `async def` getter with `functools.cached_property` instead caches
+  the coroutine object; awaiting that object again after it completes raises
+  `RuntimeError`.
+* [Explicitly locking variants](#working-with-threads), such as
+  `threaded_cached_property`, for concurrent synchronous access.
+
+The default `cached_property` in this package does not lock. In Python 3.12 and
+later, `functools.cached_property` does not lock either, so concurrent access can
+run the getter more than once. Before Python 3.12, the standard-library decorator
+had an undocumented per-property lock; see the
+[Python version notes](https://docs.python.org/3.12/library/functools.html#functools.cached_property).
+The threaded variants do not make async tasks safe to share across threads or
+event loops.
+
 ## How to use it
 
 Let's define a class with an expensive property. Every time you stay there the
