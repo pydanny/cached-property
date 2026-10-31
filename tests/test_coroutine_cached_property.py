@@ -1,9 +1,11 @@
 """
-The same tests as in :mod:`.test_async_cached_property`, but with the old
-yield from instead of the new async/await syntax. Used to test Python 3.4
-compatibility which has asyncio but doesn't have async/await yet.
+Exercise cached async properties from generator-based coroutine helpers.
+The helpers use types.coroutine and yield from; unittest awaits native async
+test methods on supported Python versions (3.8 and later).
 """
 
+import inspect
+import types
 import unittest
 from freezegun import freeze_time
 
@@ -38,20 +40,22 @@ class TestCachedProperty(unittest.IsolatedAsyncioTestCase):
 
     cached_property_factory = cached_property.cached_property
 
-    async def assert_control(self, check, expected):
+    @types.coroutine
+    def assert_control(self, check, expected):
         """
         Assert that both `add_control` and 'control_total` equal `expected`
         """
-        value = yield check.add_control()
+        value = yield from check.add_control()
         self.assertEqual(expected, value)
         self.assertEqual(expected, check.control_total)
 
-    async def assert_cached(self, check, expected):
+    @types.coroutine
+    def assert_cached(self, check, expected):
         """
         Assert that both `add_cached` and 'cached_total` equal `expected`
         """
         print("assert_cached", check.add_cached)
-        value = yield check.add_cached
+        value = yield from check.add_cached
         self.assertEqual(expected, value)
         self.assertEqual(expected, check.cached_total)
 
@@ -60,16 +64,16 @@ class TestCachedProperty(unittest.IsolatedAsyncioTestCase):
         check = Check()
 
         # The control shows that we can continue to add 1
-        yield self.assert_control(check, 1)
-        yield self.assert_control(check, 2)
+        await self.assert_control(check, 1)
+        await self.assert_control(check, 2)
 
         # The cached version demonstrates how nothing is added after the first
-        yield self.assert_cached(check, 1)
-        yield self.assert_cached(check, 1)
+        await self.assert_cached(check, 1)
+        await self.assert_cached(check, 1)
 
         # The cache does not expire
         with freeze_time("9999-01-01"):
-            yield self.assert_cached(check, 1)
+            await self.assert_cached(check, 1)
 
         # Typically descriptors return themselves if accessed though the class
         # rather than through an instance.
@@ -80,15 +84,15 @@ class TestCachedProperty(unittest.IsolatedAsyncioTestCase):
         check = Check()
 
         # Run standard cache assertion
-        yield self.assert_cached(check, 1)
-        yield self.assert_cached(check, 1)
+        await self.assert_cached(check, 1)
+        await self.assert_cached(check, 1)
 
         # Clear the cache
         del check.add_cached
 
         # Value is cached again after the next access
-        yield self.assert_cached(check, 2)
-        yield self.assert_cached(check, 2)
+        await self.assert_cached(check, 2)
+        await self.assert_cached(check, 2)
 
     async def test_none_cached_property(self):
         class Check:
@@ -99,4 +103,14 @@ class TestCachedProperty(unittest.IsolatedAsyncioTestCase):
             async def add_cached(self):
                 return self.cached_total
 
-        yield self.assert_cached(Check(), None)
+        await self.assert_cached(Check(), None)
+
+
+class TestCoroutineTestIntegrity(unittest.TestCase):
+    def test_async_test_methods_are_coroutines(self):
+        # An async generator is returned, not awaited, by unittest's runner.
+        for name in unittest.defaultTestLoader.getTestCaseNames(TestCachedProperty):
+            with self.subTest(method=name):
+                method = getattr(TestCachedProperty, name)
+                self.assertFalse(inspect.isasyncgenfunction(method))
+                self.assertTrue(inspect.iscoroutinefunction(method))

@@ -1,6 +1,7 @@
 import time
 import unittest
-from threading import Lock, Thread
+from concurrent.futures import Future
+from threading import Barrier, Lock, Thread, current_thread
 from freezegun import freeze_time
 
 import cached_property
@@ -36,15 +37,70 @@ def CheckFactory(cached_property_decorator, threadsafe=False):
             return self.cached_total
 
         def run_threads(self, num_threads):
+            def access_property(future):
+                try:
+                    future.set_result(self.add_cached)
+                except BaseException as error:
+                    future.set_exception(error)
+
             threads = []
-            for _ in range(num_threads):
-                thread = Thread(target=self.add_cached)
-                thread.start()
-                threads.append(thread)
-            for thread in threads:
-                thread.join()
+            futures = []
+            try:
+                for _ in range(num_threads):
+                    future = Future()
+                    thread = Thread(target=access_property, args=(future,))
+                    thread.start()
+                    threads.append(thread)
+                    futures.append(future)
+            finally:
+                for thread in threads:
+                    thread.join()
+            return [future.result() for future in futures]
 
     return Check
+
+
+class TestRunThreads(unittest.TestCase):
+    def test_property_is_accessed_by_every_worker(self):
+        num_threads = 5
+        barrier = Barrier(num_threads, timeout=5)
+        caller = current_thread()
+        test = self
+
+        class Check(CheckFactory(property)):
+            @property
+            def add_cached(self):
+                worker = current_thread()
+                test.assertIsNot(worker, caller)
+                barrier.wait()
+                return worker
+
+        workers = Check().run_threads(num_threads)
+        self.assertEqual(num_threads, len(set(workers)))
+        self.assertTrue(all(not worker.is_alive() for worker in workers))
+
+    def test_worker_exceptions_are_propagated_after_joining(self):
+        num_threads = 5
+        barrier = Barrier(num_threads, timeout=5)
+        workers = []
+        lock = Lock()
+        caller = current_thread()
+        test = self
+
+        class Check(CheckFactory(property)):
+            @property
+            def add_cached(self):
+                worker = current_thread()
+                test.assertIsNot(worker, caller)
+                with lock:
+                    workers.append(worker)
+                barrier.wait()
+                raise ValueError("worker failed")
+
+        with self.assertRaisesRegex(ValueError, "worker failed"):
+            Check().run_threads(num_threads)
+        self.assertEqual(num_threads, len(set(workers)))
+        self.assertTrue(all(not worker.is_alive() for worker in workers))
 
 
 class TestCachedProperty(unittest.TestCase):
