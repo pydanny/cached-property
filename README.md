@@ -74,6 +74,36 @@ Now when we run it the price stays at $550.
 
 Why doesn't the value of `monopoly.boardwalk` change? Because it's a **cached property**!
 
+## Instance dictionary requirement
+
+`cached_property` stores cached values in the instance's writable `__dict__`.
+Instances without one, such as named tuples and classes using `__slots__`
+without providing an instance dictionary, are not supported: accessing a cached
+property raises `AttributeError`. The threaded and time-to-live variants also
+require an instance dictionary. This is a storage requirement, not a restriction
+on all subclasses of these types; a subclass may have its own `__dict__`.
+
+Use an ordinary `@property` if recomputing the value on each access is acceptable,
+or use a class whose instances have a dictionary. For example, a dataclass
+without slots can cache a property:
+
+```python
+from dataclasses import dataclass
+from cached_property import cached_property
+
+@dataclass
+class Reading:
+    value: int
+
+    @cached_property
+    def doubled(self):
+        return self.value * 2
+
+reading = Reading(3)
+assert reading.doubled == 6
+assert reading.doubled == 6  # Reuses the value stored in reading.__dict__.
+```
+
 ## Invalidating the Cache
 
 Results of cached functions can be invalidated by outside forces. Let's demonstrate how to force the cache to invalidate:
