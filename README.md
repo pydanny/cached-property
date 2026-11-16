@@ -93,6 +93,54 @@ Results of cached functions can be invalidated by outside forces. Let's demonstr
 600
 ```
 
+## Generators and iterators
+
+`cached_property` caches the object returned by the getter, not the values
+produced while iterating over that object. A generator is a one-shot iterator:
+accessing the property again returns the same generator, possibly exhausted.
+
+```python
+>>> from cached_property import cached_property
+>>> class Samples:
+...     @cached_property
+...     def stream(self):
+...         yield from range(3)
+...     @cached_property
+...     def values(self):
+...         return tuple(n for n in range(3))
+>>> samples = Samples()
+>>> list(samples.stream)
+[0, 1, 2]
+>>> list(samples.stream)
+[]
+>>> samples.values
+(0, 1, 2)
+>>> list(samples.values)
+[0, 1, 2]
+>>> list(samples.values)
+[0, 1, 2]
+>>> saved = samples.values
+>>> samples.values is saved
+True
+>>> del samples.values
+>>> samples.values == saved
+True
+>>> samples.values is saved
+False
+
+```
+
+For a **finite input that fits in memory**, return a tuple (or list) from the
+getter instead of yielding its values. Materialization consumes the input on
+first access; it is not lazy and requires memory proportional to the results.
+Never materialize an infinite iterator this way. A cached list is shared mutable
+state for that instance; the tuple recipe avoids changing its sequence contents.
+Deleting the property causes the next access to recompute it, as shown above.
+
+This recipe does not add lazy replay, independent cursors, or thread-safe
+iteration to generators. Code that needs those features requires a different
+iterator abstraction; decorating a generator alone does not provide them.
+
 ## Working with Threads
 
 What if a whole bunch of people want to stay at Boardwalk all at once? This means using threads, which
